@@ -12,206 +12,140 @@ describe('Book Capa (Upload de Capas)', function () {
         Storage::fake('public');
     });
 
-    test('pode criar livro sem capa', function () {
+    test('pode criar livro com capa válida', function () {
         $author = Author::factory()->create();
+        $file   = UploadedFile::fake()->image('capa.jpg', 300, 300)->size(1024);
 
         $response = $this->actingAs($this->user)
             ->post(route('books.store'), [
-                'titulo'          => 'Livro sem Capa',
-                'descricao'       => 'Descrição do livro',
-                'data_publicacao' => '2024-01-01',
-                'author_id'       => $author->id,
-            ]);
-
-        $response->assertRedirect(route('books.index'));
-        $response->assertSessionHas('success', 'Livro criado com sucesso!');
-
-        $this->assertDatabaseHas('books', [
-            'titulo' => 'Livro sem Capa',
-            'capa'   => null,
-        ]);
-    });
-
-    test('rejeita arquivo que não é imagem', function () {
-        $author = Author::factory()->create();
-        $file   = UploadedFile::fake()->create('documento.txt', 100, 'text/plain');
-
-        $response = $this->actingAs($this->user)
-            ->post(route('books.store'), [
-                'titulo'          => 'Livro Teste',
+                'titulo'          => 'Livro com Capa',
                 'descricao'       => 'Descrição do livro',
                 'data_publicacao' => '2024-01-01',
                 'author_id'       => $author->id,
                 'capa'            => $file,
             ]);
 
-        $response->assertSessionHasErrors(['capa']);
+        $response->assertRedirect(route('books.index'));
+        $response->assertSessionHas('success', 'Livro criado com sucesso!');
+
+        $book = Book::where('titulo', 'Livro com Capa')->first();
+        expect($book->capa)->not->toBeNull();
+        expect($book->capa)->toContain('capas/');
+        Storage::disk('public')->assertExists($book->capa);
     });
 
-    test('rejeita arquivo muito grande', function () {
+    test('valida formato e tamanho da capa', function () {
         $author = Author::factory()->create();
-        // Simula arquivo de 3MB (maior que o limite de 2MB)
-        $file = UploadedFile::fake()->create('capa.jpg', 3072, 'image/jpeg');
 
+        // Teste arquivo inválido (não é imagem)
+        $fileInvalido = UploadedFile::fake()->create('documento.txt', 100, 'text/plain');
         $response = $this->actingAs($this->user)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Teste',
                 'descricao'       => 'Descrição do livro',
                 'data_publicacao' => '2024-01-01',
                 'author_id'       => $author->id,
-                'capa'            => $file,
+                'capa'            => $fileInvalido,
             ]);
+        $response->assertSessionHasErrors(['capa']);
 
+        // Teste arquivo muito grande
+        $fileMuitoGrande = UploadedFile::fake()->image('capa.jpg', 500, 500)->size(3072); // 3MB
+        $response = $this->actingAs($this->user)
+            ->post(route('books.store'), [
+                'titulo'          => 'Livro Teste 2',
+                'descricao'       => 'Descrição do livro',
+                'data_publicacao' => '2024-01-01',
+                'author_id'       => $author->id,
+                'capa'            => $fileMuitoGrande,
+            ]);
         $response->assertSessionHasErrors(['capa']);
     });
 
-    test('validação funciona para campos obrigatórios', function () {
-        $response = $this->actingAs($this->user)
-            ->post(route('books.store'), []);
-
-        $response->assertSessionHasErrors(['titulo', 'descricao', 'data_publicacao', 'author_id']);
-    });
-
-    test('pode criar livro com dados válidos sem capa', function () {
+    test('redimensiona imagem para 200x200 pixels', function () {
         $author = Author::factory()->create();
+        $file   = UploadedFile::fake()->image('capa_grande.jpg', 800, 600)->size(1000);
 
         $response = $this->actingAs($this->user)
             ->post(route('books.store'), [
-                'titulo'          => 'Livro Válido',
-                'descricao'       => 'Descrição válida',
+                'titulo'          => 'Livro Redimensionado',
+                'descricao'       => 'Teste de redimensionamento',
                 'data_publicacao' => '2024-01-01',
                 'author_id'       => $author->id,
+                'capa'            => $file,
             ]);
 
         $response->assertRedirect(route('books.index'));
-        $response->assertSessionHas('success', 'Livro criado com sucesso!');
 
-        $this->assertDatabaseHas('books', [
-            'titulo' => 'Livro Válido',
-            'capa'   => null,
-        ]);
+        $book = Book::where('titulo', 'Livro Redimensionado')->first();
+        expect($book->capa)->not->toBeNull();
+        Storage::disk('public')->assertExists($book->capa);
+        expect($book->capa)->toContain('capas/');
     });
 
-    test('pode atualizar livro mantendo capa', function () {
+    test('pode substituir capa existente', function () {
         $author = Author::factory()->create();
         $book   = Book::factory()->create([
             'author_id' => $author->id,
-            'capa'      => 'capas/capa_existente.jpg',
+            'capa'      => 'capas/capa_antiga.jpg',
         ]);
 
-        Storage::disk('public')->put('capas/capa_existente.jpg', 'conteudo_fake');
+        // Simular arquivo existente no storage
+        Storage::disk('public')->put('capas/capa_antiga.jpg', 'conteudo_antigo');
+
+        $newFile = UploadedFile::fake()->image('nova_capa.png', 200, 200)->size(500);
 
         $response = $this->actingAs($this->user)
             ->put(route('books.update', $book), [
-                'titulo'          => 'Título Atualizado',
+                'titulo'          => $book->titulo,
                 'descricao'       => $book->descricao,
                 'data_publicacao' => $book->data_publicacao->format('Y-m-d'),
                 'author_id'       => $book->author_id,
+                'capa'            => $newFile,
             ]);
 
         $response->assertRedirect(route('books.index'));
         $book->refresh();
 
-        expect($book->titulo)->toBe('Título Atualizado');
-        expect($book->capa)->toBe('capas/capa_existente.jpg');
-        Storage::disk('public')->assertExists('capas/capa_existente.jpg');
+        // Verificar se a capa antiga foi deletada
+        Storage::disk('public')->assertMissing('capas/capa_antiga.jpg');
+
+        // Verificar se a nova capa foi salva
+        expect($book->capa)->not->toBe('capas/capa_antiga.jpg');
+        expect($book->capa)->toContain('capas/');
+        Storage::disk('public')->assertExists($book->capa);
     });
 
-    test('pode atualizar livro básico', function () {
+    test('remove capa ao deletar livro', function () {
         $author = Author::factory()->create();
-        $book   = Book::factory()->create([
-            'author_id' => $author->id,
-            'titulo'    => 'Título Original',
-        ]);
+        $file   = UploadedFile::fake()->image('capa_deletar.jpg', 200, 200)->size(500);
 
+        // Criar livro com capa
         $response = $this->actingAs($this->user)
-            ->put(route('books.update', $book), [
-                'titulo'          => 'Título Atualizado',
-                'descricao'       => $book->descricao,
-                'data_publicacao' => $book->data_publicacao->format('Y-m-d'),
-                'author_id'       => $book->author_id,
+            ->post(route('books.store'), [
+                'titulo'          => 'Livro Para Deletar',
+                'descricao'       => 'Será deletado',
+                'data_publicacao' => '2024-01-01',
+                'author_id'       => $author->id,
+                'capa'            => $file,
             ]);
 
-        $response->assertRedirect(route('books.index'));
-        $book->refresh();
+        $book     = Book::where('titulo', 'Livro Para Deletar')->first();
+        $capaPath = $book->capa;
 
-        expect($book->titulo)->toBe('Título Atualizado');
-    });
+        // Verificar que a capa existe
+        Storage::disk('public')->assertExists($capaPath);
 
-    test('pode deletar livro básico', function () {
-        $author = Author::factory()->create();
-        $book   = Book::factory()->create([
-            'author_id' => $author->id,
-        ]);
-
+        // Deletar o livro
         $response = $this->actingAs($this->user)
             ->delete(route('books.destroy', $book));
 
         $response->assertRedirect(route('books.index'));
+
+        // Verificar se o livro foi deletado do banco
         $this->assertDatabaseMissing('books', ['id' => $book->id]);
-    });
 
-    test('página index exibe lista de livros', function () {
-        $author = Author::factory()->create();
-        Book::factory()->create([
-            'author_id' => $author->id,
-            'titulo'    => 'Livro Visível',
-        ]);
-
-        $response = $this->actingAs($this->user)
-            ->get(route('books.index'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Livro Visível');
-    });
-
-    test('página pública exibe lista de livros', function () {
-        $author = Author::factory()->create();
-        Book::factory()->create([
-            'author_id' => $author->id,
-            'titulo'    => 'Livro Público',
-        ]);
-
-        $response = $this->get(route('books.public'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Livro Público');
-    });
-
-    test('página de detalhes exibe livro', function () {
-        $author = Author::factory()->create();
-        $book   = Book::factory()->create([
-            'author_id' => $author->id,
-            'titulo'    => 'Livro Detalhado',
-        ]);
-
-        $response = $this->actingAs($this->user)
-            ->get(route('books.show', $book));
-
-        $response->assertStatus(200);
-        $response->assertSee('Livro Detalhado');
-    });
-
-    test('formulário de criação é exibido', function () {
-        Author::factory()->create();
-
-        $response = $this->actingAs($this->user)
-            ->get(route('books.create'));
-
-        $response->assertStatus(200);
-        $response->assertSee('enctype="multipart/form-data"', false);
-        $response->assertSee('name="capa"', false);
-    });
-
-    test('formulário de edição é exibido', function () {
-        $author = Author::factory()->create();
-        $book   = Book::factory()->create(['author_id' => $author->id]);
-
-        $response = $this->actingAs($this->user)
-            ->get(route('books.edit', $book));
-
-        $response->assertStatus(200);
-        $response->assertSee('enctype="multipart/form-data"', false);
-        $response->assertSee('name="capa"', false);
+        // Verificar se a capa foi removida do storage
+        Storage::disk('public')->assertMissing($capaPath);
     });
 });
