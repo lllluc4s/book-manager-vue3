@@ -60,7 +60,7 @@ class BookSeeder extends Seeder
 
         foreach ($books as $bookData) {
             $author = $authors->where('nome', $bookData['autor'])->first();
-            
+
             Book::create([
                 'titulo'          => $bookData['titulo'],
                 'descricao'       => $bookData['descricao'],

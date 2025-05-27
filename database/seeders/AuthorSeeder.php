@@ -13,7 +13,7 @@ class AuthorSeeder extends Seeder
     {
         $authors = [
             'Fiódor Dostoiévski',
-            'Lev Tolstói', 
+            'Lev Tolstói',
             'Anton Tchekhov',
             'Aleksandr Pushkin',
         ];
