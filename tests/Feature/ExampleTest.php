@@ -13,7 +13,7 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        // A aplicação deve redirecionar corretamente (indica que está funcionando)
-        $response->assertStatus(302);
+        // A aplicação deve retornar a página de boas-vindas
+        $response->assertStatus(200);
     }
 }

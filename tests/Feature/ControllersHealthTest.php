@@ -6,7 +6,8 @@ use App\Models\User;
 
 describe('Controllers Essenciais', function () {
     beforeEach(function () {
-        $this->user = User::factory()->create();
+        $this->user      = User::factory()->create();
+        $this->adminUser = User::factory()->create(['role' => 'admin']);
     });
 
     test('página inicial de livros funciona para usuários logados', function () {
@@ -25,7 +26,7 @@ describe('Controllers Essenciais', function () {
             'estado' => true,
         ];
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->post(route('authors.store'), $authorData)
             ->assertRedirect(route('authors.index'));
 
@@ -41,7 +42,7 @@ describe('Controllers Essenciais', function () {
             'author_id'       => $author->id,
         ];
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->post(route('books.store'), $bookData)
             ->assertRedirect(route('books.index'));
 
