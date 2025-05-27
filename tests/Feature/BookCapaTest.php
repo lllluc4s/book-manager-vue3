@@ -39,7 +39,7 @@ describe('Book Capa (Upload de Capas)', function () {
 
         // Teste arquivo inválido (não é imagem)
         $fileInvalido = UploadedFile::fake()->create('documento.txt', 100, 'text/plain');
-        $response = $this->actingAs($this->user)
+        $response     = $this->actingAs($this->user)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Teste',
                 'descricao'       => 'Descrição do livro',
@@ -51,7 +51,7 @@ describe('Book Capa (Upload de Capas)', function () {
 
         // Teste arquivo muito grande
         $fileMuitoGrande = UploadedFile::fake()->image('capa.jpg', 500, 500)->size(3072); // 3MB
-        $response = $this->actingAs($this->user)
+        $response        = $this->actingAs($this->user)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Teste 2',
                 'descricao'       => 'Descrição do livro',
