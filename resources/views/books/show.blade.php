@@ -11,7 +11,7 @@
                     <h4 class="mb-0"><i class="bi bi-book"></i> {{ $book->titulo }}</h4>
                     @if(auth()->user()->canManage())
                         <div class="d-flex gap-2">
-                            <a href="{{ route('books.edit', $book) }}" class="btn btn-custom-outline btn-sm">
+                            <a href="{{ route('books.edit', $book) }}" class="btn btn-edit-outline btn-sm">
                                 <i class="bi bi-pencil"></i> Editar
                             </a>
                             <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 

@@ -10,7 +10,7 @@
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-custom">
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{ auth()->check() ? route('books.index') : route('home') }}">
                 <i class="bi bi-book"></i> Gestão de Livros

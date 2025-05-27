@@ -16,6 +16,12 @@ class AuthorSeeder extends Seeder
             'Lev Tolstói',
             'Anton Tchekhov',
             'Aleksandr Pushkin',
+            'Nikolai Gogol',
+            'Ivan Turguêniev',
+            'Mikhail Bulgakov',
+            'Boris Pasternak',
+            'Aleksandr Soljenítsin',
+            'Maxim Górki',
         ];
 
         foreach ($authors as $name) {

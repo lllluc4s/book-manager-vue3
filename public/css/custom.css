@@ -1,3 +1,8 @@
+/* Compensação para navbar fixa */
+body {
+  padding-top: 70px; /* Espaçamento para navbar fixa */
+}
+
 /* Paleta de cores personalizada */
 :root {
   --primary-color: #333;
@@ -104,6 +109,7 @@
 .card-header {
   background-color: var(--primary-color) !important;
   border-bottom-color: var(--border-color) !important;
+  color: var(--background-color) !important;
 }
 
 body {
@@ -169,4 +175,25 @@ a:hover {
 .login-container .row {
   width: 100%;
   margin: 0;
+}
+
+/* Botão editar personalizado com letra e borda brancas */
+.btn-edit-outline {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.btn-edit-outline:hover {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+
+.btn-edit-outline:focus,
+.btn-edit-outline:active {
+  background-color: #0a58ca !important;
+  border-color: #0a58ca !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.5) !important;
 }
