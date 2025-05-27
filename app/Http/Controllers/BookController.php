@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Author;
 use App\Models\Book;
+use App\Models\Author;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class BookController extends Controller
 {
@@ -141,8 +142,11 @@ class BookController extends Controller
         $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
         $path     = 'capas/' . $filename;
 
+        // Criar instância do manager
+        $manager = new ImageManager(new Driver());
+
         // Redimensionar para 200x200
-        $image = Image::read($file->getRealPath())
+        $image = $manager->read($file->getRealPath())
             ->cover(200, 200)
             ->encode();
 

@@ -48,6 +48,7 @@ describe('Controllers Essenciais', function () {
         $this->assertDatabaseHas('books', [
             'titulo'    => $bookData['titulo'],
             'author_id' => $bookData['author_id'],
+            'capa'      => null,
         ]);
     });
 
