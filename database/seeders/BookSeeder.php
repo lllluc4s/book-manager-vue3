@@ -21,43 +21,51 @@ class BookSeeder extends Seeder
 
         $books = [
             [
-                'titulo'          => 'O Cortiço',
-                'descricao'       => 'Romance naturalista brasileiro que retrata a vida em um cortiço no Rio de Janeiro do século XIX, explorando as condições sociais e os conflitos humanos da época.',
-                'data_publicacao' => '1890-01-15',
+                'titulo'          => 'Crime e Castigo',
+                'descricao'       => 'Romance psicológico que narra a história de Raskólnikov, um jovem estudante que comete um duplo assassinato e lida com as consequências morais e psicológicas de seus atos.',
+                'data_publicacao' => '1866-01-01',
+                'autor'           => 'Fiódor Dostoiévski',
             ],
             [
-                'titulo'          => 'Dom Casmurro',
-                'descricao'       => 'Clássico da literatura brasileira que narra a história de Bentinho e Capitu, explorando temas como ciúme, memória e a complexidade dos relacionamentos humanos.',
-                'data_publicacao' => '1899-12-01',
+                'titulo'          => 'Guerra e Paz',
+                'descricao'       => 'Épico histórico que retrata a sociedade russa durante as guerras napoleônicas, seguindo as vidas de várias famílias aristocráticas russas.',
+                'data_publicacao' => '1869-01-01',
+                'autor'           => 'Lev Tolstói',
             ],
             [
-                'titulo'          => 'A Moreninha',
-                'descricao'       => 'Romance romântico brasileiro que conta a história de amor entre Augusto e Carolina, ambientado na Ilha de Paquetá, no Rio de Janeiro.',
-                'data_publicacao' => '1844-06-10',
+                'titulo'          => 'Anna Karenina',
+                'descricao'       => 'Drama que conta a história trágica de Anna Karenina, uma mulher da alta sociedade russa que se envolve em um caso amoroso que mudará sua vida para sempre.',
+                'data_publicacao' => '1877-01-01',
+                'autor'           => 'Lev Tolstói',
             ],
             [
-                'titulo'          => 'O Guarani',
-                'descricao'       => 'Romance indianista que narra a história de amor entre Peri, um índio guarani, e Ceci, filha de um fidalgo português, durante o período colonial brasileiro.',
-                'data_publicacao' => '1857-04-20',
+                'titulo'          => 'O Jardim das Cerejeiras',
+                'descricao'       => 'Peça teatral que retrata o declínio da aristocracia russa através da história de uma família que deve vender sua propriedade ancestral.',
+                'data_publicacao' => '1904-01-17',
+                'autor'           => 'Anton Tchekhov',
             ],
             [
-                'titulo'          => 'Iracema',
-                'descricao'       => 'Lenda do Ceará que conta a história de amor entre a índia Iracema e o português Martim, simbolizando o nascimento do povo brasileiro.',
-                'data_publicacao' => '1865-05-01',
+                'titulo'          => 'Eugênio Onéguin',
+                'descricao'       => 'Romance em versos que narra a história do jovem aristocrata Eugênio Onéguin e seu relacionamento com Tatiana, explorando temas do amor e da sociedade russa.',
+                'data_publicacao' => '1833-01-01',
+                'autor'           => 'Aleksandr Pushkin',
             ],
             [
-                'titulo'          => 'O Ateneu',
-                'descricao'       => 'Romance que critica o sistema educacional brasileiro através da narrativa autobiográfica de Sérgio, um jovem estudante em um colégio interno.',
-                'data_publicacao' => '1888-03-15',
+                'titulo'          => 'Os Irmãos Karamázov',
+                'descricao'       => 'Último romance de Dostoiévski que explora questões filosóficas e religiosas através da história de uma família disfuncional e o assassinato do patriarca.',
+                'data_publicacao' => '1880-01-01',
+                'autor'           => 'Fiódor Dostoiévski',
             ],
         ];
 
         foreach ($books as $bookData) {
+            $author = $authors->where('nome', $bookData['autor'])->first();
+            
             Book::create([
                 'titulo'          => $bookData['titulo'],
                 'descricao'       => $bookData['descricao'],
                 'data_publicacao' => $bookData['data_publicacao'],
-                'author_id'       => $authors->random()->id,
+                'author_id'       => $author ? $author->id : $authors->random()->id,
             ]);
         }
     }

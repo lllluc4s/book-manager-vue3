@@ -12,16 +12,10 @@ class AuthorSeeder extends Seeder
     public function run(): void
     {
         $authors = [
-            'João Silva',
-            'Maria Santos',
-            'Pedro Oliveira',
-            'Ana Costa',
-            'Carlos Ferreira',
-            'Lucia Pereira',
-            'Roberto Almeida',
-            'Fernanda Lima',
-            'Antonio Rodrigues',
-            'Isabel Carvalho',
+            'Fiódor Dostoiévski',
+            'Lev Tolstói', 
+            'Anton Tchekhov',
+            'Aleksandr Pushkin',
         ];
 
         foreach ($authors as $name) {
