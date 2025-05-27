@@ -1,0 +1,57 @@
+/* Paleta de cores personalizada */
+:root {
+    --primary-color: #333;
+    --background-color: #fff;
+    --text-color: #333;
+    --border-color: #ddd;
+}
+
+/* Override Bootstrap styles */
+.navbar-custom {
+    background-color: var(--primary-color) !important;
+    color: var(--background-color) !important;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: var(--background-color) !important;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #ccc !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--background-color) !important;
+}
+
+.btn-primary:hover {
+    background-color: #555 !important;
+    border-color: #555 !important;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--background-color) !important;
+}
+
+.card {
+    border-color: var(--border-color) !important;
+}
+
+.card-header {
+    background-color: #f8f9fa !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+body {
+    color: var(--text-color) !important;
+}
