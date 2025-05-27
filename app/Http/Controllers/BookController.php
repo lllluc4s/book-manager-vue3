@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Author;
 use App\Models\Book;
+use App\Models\Author;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class BookController extends Controller
 {
@@ -47,9 +50,17 @@ class BookController extends Controller
             'descricao'       => 'required|string',
             'data_publicacao' => 'required|date',
             'author_id'       => 'required|exists:authors,id',
+            'capa'            => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        Book::create($request->all());
+        $data = $request->all();
+
+        // Processar upload da capa
+        if ($request->hasFile('capa')) {
+            $data['capa'] = $this->processImageUpload($request->file('capa'));
+        }
+
+        Book::create($data);
 
         return redirect()->route('books.index')
             ->with('success', 'Livro criado com sucesso!');
@@ -85,9 +96,22 @@ class BookController extends Controller
             'descricao'       => 'required|string',
             'data_publicacao' => 'required|date',
             'author_id'       => 'required|exists:authors,id',
+            'capa'            => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        $book->update($request->all());
+        $data = $request->only(['titulo', 'descricao', 'data_publicacao', 'author_id']);
+
+        // Processar upload da capa apenas se um novo arquivo foi enviado
+        if ($request->hasFile('capa')) {
+            // Deletar capa anterior se existir
+            if ($book->capa) {
+                Storage::disk('public')->delete($book->capa);
+            }
+            $data['capa'] = $this->processImageUpload($request->file('capa'));
+        }
+        // Não incluir 'capa' no $data se não há upload, mantendo o valor atual
+
+        $book->update($data);
 
         return redirect()->route('books.index')
             ->with('success', 'Livro atualizado com sucesso!');
@@ -98,9 +122,59 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        // Deletar capa se existir
+        if ($book->capa) {
+            Storage::disk('public')->delete($book->capa);
+        }
+
         $book->delete();
 
         return redirect()->route('books.index')
             ->with('success', 'Livro excluído com sucesso!');
+    }
+
+    /**
+     * Remove apenas a capa do livro.
+     */
+    public function removeCapa(Book $book)
+    {
+        // Verificar se o livro tem capa
+        if ($book->capa) {
+            // Deletar arquivo da capa
+            Storage::disk('public')->delete($book->capa);
+
+            // Remover referência da capa no banco
+            $book->update(['capa' => null]);
+
+            return redirect()->back()
+                ->with('success', 'Capa removida com sucesso!');
+        }
+
+        return redirect()->back()
+            ->with('error', 'Este livro não possui capa para remover.');
+    }
+
+    /**
+     * Processa o upload e redimensionamento da imagem.
+     *
+     * @param mixed $file
+     */
+    private function processImageUpload($file)
+    {
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $path     = 'capas/' . $filename;
+
+        // Criar instância do manager
+        $manager = new ImageManager(new Driver());
+
+        // Redimensionar para 200x200
+        $image = $manager->read($file->getRealPath())
+            ->cover(200, 200)
+            ->encode();
+
+        // Salvar no storage
+        Storage::disk('public')->put($path, $image);
+
+        return $path;
     }
 }

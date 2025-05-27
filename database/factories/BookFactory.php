@@ -20,6 +20,17 @@ class BookFactory extends Factory
             'descricao'       => fake()->paragraph(),
             'data_publicacao' => fake()->date(),
             'author_id'       => \App\Models\Author::factory(),
+            'capa'            => null, // Por padrão, sem capa
         ];
+    }
+
+    /**
+     * Indica que o livro deve ter uma capa.
+     */
+    public function withCover(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'capa' => 'capas/fake_cover_' . fake()->uuid() . '.jpg',
+        ]);
     }
 }
