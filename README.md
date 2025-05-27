@@ -6,27 +6,27 @@ Sistema Laravel completo para gestão de livros e autores com interface web mode
 
 ### 🌐 Sistema Web
 
--   ✅ Interface responsiva com Bootstrap 5
--   ✅ CRUD completo para Livros e Autores
--   ✅ Sistema de autenticação integrado
--   ✅ Área pública (catálogo) sem login
--   ✅ Área administrativa protegida
--   ✅ Relacionamentos entre entidades
+- ✅ Interface responsiva com Bootstrap 5
+- ✅ CRUD completo para Livros e Autores
+- ✅ Sistema de autenticação integrado
+- ✅ Área pública (catálogo) sem login
+- ✅ Área administrativa protegida
+- ✅ Relacionamentos entre entidades
 
 ### 🔌 API REST
 
--   ✅ Autenticação com Laravel Sanctum
--   ✅ Endpoints para gestão de autores
--   ✅ Proteção por tokens de acesso
--   ✅ Documentação da API incluída
+- ✅ Autenticação com Laravel Sanctum
+- ✅ Endpoints para gestão de autores
+- ✅ Proteção por tokens de acesso
+- ✅ Documentação da API incluída
 
 ## 🛠️ Tecnologias
 
--   **Framework:** Laravel 10
--   **Frontend:** Blade + Bootstrap 5
--   **Banco:** MySQL/MariaDB
--   **API:** Laravel Sanctum
--   **Autenticação:** Laravel Auth
+- **Framework:** Laravel 10
+- **Frontend:** Blade + Bootstrap 5
+- **Banco:** MySQL/MariaDB
+- **API:** Laravel Sanctum
+- **Autenticação:** Laravel Auth
 
 ## 📦 Instalação e Configuração
 
@@ -75,13 +75,13 @@ Acesse: `http://127.0.0.1:8000`
 
 ## 👤 Usuários de Teste
 
--   **Admin:** admin@test.com / password
--   **User:** user@test.com / password
+- **Admin:** admin@test.com / password
+- **User:** user@test.com / password
 
 ## 📖 Documentação
 
--   **[Documentação Web](WEB_DOCUMENTATION.md)** - Guia completo do sistema web
--   **[Documentação API](API_DOCUMENTATION.md)** - Referência da API REST
+- **[Documentação Web](WEB_DOCUMENTATION.md)** - Guia completo do sistema web
+- **[Documentação API](API_DOCUMENTATION.md)** - Referência da API REST
 
 ## 🌍 URLs Principais
 
@@ -123,37 +123,17 @@ users: id, name, email, password, timestamps
 
 ### 1. Acesso Público
 
--   Visite `/books/public` para ver o catálogo
--   Navegue por `/authors/public` para conhecer os autores
+- Visite `/books/public` para ver o catálogo
+- Navegue por `/authors/public` para conhecer os autores
 
 ### 2. Acesso Administrativo
 
--   Faça login em `/login`
--   Gerencie livros em `/books`
--   Gerencie autores em `/authors`
+- Faça login em `/login`
+- Gerencie livros em `/books`
+- Gerencie autores em `/authors`
 
 ### 3. API
 
--   Obtenha token em `/api/auth/login`
--   Use o token no header: `Authorization: Bearer {token}`
--   Acesse endpoints protegidos
-
-## 📈 Status do Projeto
-
-**✅ CONCLUÍDO** - Sistema totalmente funcional com todas as funcionalidades implementadas:
-
--   [x] CRUD de Livros e Autores
--   [x] Autenticação Web e API
--   [x] Interface responsiva
--   [x] Relacionamentos entre entidades
--   [x] Validações e proteções
--   [x] Seeders com dados de exemplo
--   [x] Documentação completa
-
-## 🤝 Contribuição
-
-Este projeto foi desenvolvido como sistema de gestão completo seguindo as melhores práticas do Laravel.
-
----
-
-**Desenvolvido com ❤️ usando Laravel e Bootstrap**
+- Obtenha token em `/api/auth/login`
+- Use o token no header: `Authorization: Bearer {token}`
+- Acesse endpoints protegidos
