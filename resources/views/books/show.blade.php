@@ -10,7 +10,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="bi bi-book"></i> {{ $book->titulo }}</h4>
                     <div class="btn-group" role="group">
-                        <a href="{{ route('books.edit', $book) }}" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ route('books.edit', $book) }}" class="btn btn-custom-outline btn-sm">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
                         <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="{{ route('books.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('books.index') }}" class="btn btn-custom-outline">
                         <i class="bi bi-arrow-left"></i> Voltar à Lista
                     </a>
                 </div>

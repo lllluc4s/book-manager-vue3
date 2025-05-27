@@ -5,7 +5,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1><i class="bi bi-book"></i> Lista de Livros</h1>
-    <a href="{{ route('books.create') }}" class="btn btn-primary">
+    <a href="{{ route('books.create') }}" class="btn btn-custom-primary">
         <i class="bi bi-plus-circle"></i> Novo Livro
     </a>
 </div>
@@ -27,10 +27,10 @@
                     </div>
                     <div class="card-footer bg-transparent">
                         <div class="btn-group w-100" role="group">
-                            <a href="{{ route('books.show', $book) }}" class="btn btn-outline-primary btn-sm">
+                            <a href="{{ route('books.show', $book) }}" class="btn btn-custom-outline btn-sm">
                                 <i class="bi bi-eye"></i> Ver
                             </a>
-                            <a href="{{ route('books.edit', $book) }}" class="btn btn-outline-secondary btn-sm">
+                            <a href="{{ route('books.edit', $book) }}" class="btn btn-custom-outline btn-sm">
                                 <i class="bi bi-pencil"></i> Editar
                             </a>
                             <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
