@@ -1,0 +1,23 @@
+# Configuração do Dependabot para atualizações automáticas de dependências
+version: 2
+updates:
+  # Dependências do Composer (PHP/Laravel)
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "php"
+      - "composer"
+    commit-message:
+      prefix: "⬆️ deps"
+      include: "scope"
+    reviewers:
+      - "lllluc4s"
+    assignees:
+      - "lllluc4s"
