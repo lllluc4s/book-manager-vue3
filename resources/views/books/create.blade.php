@@ -10,7 +10,7 @@
                 <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Criar Novo Livro</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('books.store') }}" method="POST">
+                <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="mb-3">
@@ -52,6 +52,18 @@
                         <textarea class="form-control @error('descricao') is-invalid @enderror" 
                                   id="descricao" name="descricao" rows="5" required>{{ old('descricao') }}</textarea>
                         @error('descricao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="capa" class="form-label">Capa do Livro</label>
+                        <input type="file" class="form-control @error('capa') is-invalid @enderror" 
+                               id="capa" name="capa" accept="image/jpeg,image/jpg,image/png">
+                        <div class="form-text">
+                            Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB. A imagem será redimensionada para 200x200 pixels.
+                        </div>
+                        @error('capa')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

@@ -15,6 +15,14 @@
         @foreach($books as $book)
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100">
+                    @if($book->capa)
+                        <div class="text-center pt-3">
+                            <img src="{{ asset('storage/' . $book->capa) }}" 
+                                 alt="Capa de {{ $book->titulo }}" 
+                                 class="rounded"
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                    @endif
                     <div class="card-body">
                         <h5 class="card-title">{{ $book->titulo }}</h5>
                         <p class="card-text text-muted mb-2">

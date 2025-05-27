@@ -26,26 +26,43 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-muted">Autor</h6>
-                        <p class="mb-3">
-                            <i class="bi bi-person"></i> 
-                            <a href="{{ route('authors.show', $book->author) }}" class="text-decoration-none">
-                                {{ $book->author->nome }}
-                            </a>
-                        </p>
+                    @if($book->capa)
+                        <div class="col-md-3 mb-3">
+                            <h6 class="text-muted">Capa</h6>
+                            <img src="{{ asset('storage/' . $book->capa) }}" 
+                                 alt="Capa de {{ $book->titulo }}" 
+                                 class="img-fluid rounded shadow-sm"
+                                 style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-9">
+                    @else
+                        <div class="col-md-12">
+                    @endif
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Autor</h6>
+                                <p class="mb-3">
+                                    <i class="bi bi-person"></i> 
+                                    <a href="{{ route('authors.show', $book->author) }}" class="text-decoration-none">
+                                        {{ $book->author->nome }}
+                                    </a>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Data de Publicação</h6>
+                                <p class="mb-3">
+                                    <i class="bi bi-calendar"></i> {{ $book->data_publicacao->format('d/m/Y') }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <h6 class="text-muted">Data de Publicação</h6>
-                        <p class="mb-3">
-                            <i class="bi bi-calendar"></i> {{ $book->data_publicacao->format('d/m/Y') }}
-                        </p>
-                    </div>
-                </div>
 
-                <h6 class="text-muted">Descrição</h6>
-                <div class="border rounded p-3 bg-light">
-                    {!! nl2br(e($book->descricao)) !!}
+                    <div class="col-12 mt-3">
+                        <h6 class="text-muted">Descrição</h6>
+                        <div class="border rounded p-3 bg-light">
+                            {!! nl2br(e($book->descricao)) !!}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-4">
