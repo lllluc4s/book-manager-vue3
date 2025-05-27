@@ -99,9 +99,9 @@ class BookController extends Controller
             'capa'            => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['titulo', 'descricao', 'data_publicacao', 'author_id']);
 
-        // Processar upload da capa
+        // Processar upload da capa apenas se um novo arquivo foi enviado
         if ($request->hasFile('capa')) {
             // Deletar capa anterior se existir
             if ($book->capa) {
@@ -109,6 +109,7 @@ class BookController extends Controller
             }
             $data['capa'] = $this->processImageUpload($request->file('capa'));
         }
+        // Não incluir 'capa' no $data se não há upload, mantendo o valor atual
 
         $book->update($data);
 
@@ -130,6 +131,27 @@ class BookController extends Controller
 
         return redirect()->route('books.index')
             ->with('success', 'Livro excluído com sucesso!');
+    }
+
+    /**
+     * Remove apenas a capa do livro.
+     */
+    public function removeCapa(Book $book)
+    {
+        // Verificar se o livro tem capa
+        if ($book->capa) {
+            // Deletar arquivo da capa
+            Storage::disk('public')->delete($book->capa);
+
+            // Remover referência da capa no banco
+            $book->update(['capa' => null]);
+
+            return redirect()->back()
+                ->with('success', 'Capa removida com sucesso!');
+        }
+
+        return redirect()->back()
+            ->with('error', 'Este livro não possui capa para remover.');
     }
 
     /**

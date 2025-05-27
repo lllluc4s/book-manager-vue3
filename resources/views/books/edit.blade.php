@@ -63,8 +63,15 @@
                         <label for="capa" class="form-label">Capa do Livro</label>
                         @if($book->capa)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/' . $book->capa) }}" alt="Capa atual" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                <small class="text-muted d-block">Capa atual</small>
+                                <div class="d-flex align-items-start gap-3">
+                                    <img src="{{ asset('storage/' . $book->capa) }}" alt="Capa atual" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                    <div>
+                                        <small class="text-muted d-block mb-2">Capa atual</small>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="removerCapa()">
+                                            <i class="bi bi-trash"></i> Remover Capa
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                         <input type="file" class="form-control @error('capa') is-invalid @enderror" 
@@ -90,4 +97,34 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de confirmação para remover capa -->
+<div class="modal fade" id="removerCapaModal" tabindex="-1" aria-labelledby="removerCapaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removerCapaModalLabel">Confirmar Remoção</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja remover a capa deste livro? Esta ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="removerCapaForm" method="POST" action="{{ route('books.removeCapa', $book) }}" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Sim, Remover</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function removerCapa() {
+    var modal = new bootstrap.Modal(document.getElementById('removerCapaModal'));
+    modal.show();
+}
+</script>
 @endsection

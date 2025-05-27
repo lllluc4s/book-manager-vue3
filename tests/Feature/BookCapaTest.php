@@ -148,4 +148,56 @@ describe('Book Capa (Upload de Capas)', function () {
         // Verificar se a capa foi removida do storage
         Storage::disk('public')->assertMissing($capaPath);
     });
+
+    test('pode remover apenas a capa do livro', function () {
+        $author = Author::factory()->create();
+        $file   = UploadedFile::fake()->image('capa_remover.jpg', 200, 200)->size(500);
+
+        // Criar livro com capa
+        $response = $this->actingAs($this->user)
+            ->post(route('books.store'), [
+                'titulo'          => 'Livro Com Capa',
+                'descricao'       => 'Terá capa removida',
+                'data_publicacao' => '2024-01-01',
+                'author_id'       => $author->id,
+                'capa'            => $file,
+            ]);
+
+        $book     = Book::where('titulo', 'Livro Com Capa')->first();
+        $capaPath = $book->capa;
+
+        // Verificar que a capa existe
+        Storage::disk('public')->assertExists($capaPath);
+        expect($book->capa)->not->toBeNull();
+
+        // Remover apenas a capa
+        $response = $this->actingAs($this->user)
+            ->delete(route('books.removeCapa', $book));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success', 'Capa removida com sucesso!');
+
+        $book->refresh();
+
+        // Verificar se o livro ainda existe no banco
+        $this->assertDatabaseHas('books', ['id' => $book->id]);
+
+        // Verificar se a capa foi removida
+        expect($book->capa)->toBeNull();
+        Storage::disk('public')->assertMissing($capaPath);
+    });
+
+    test('retorna erro ao tentar remover capa de livro sem capa', function () {
+        $author = Author::factory()->create();
+        $book   = Book::factory()->create([
+            'author_id' => $author->id,
+            'capa'      => null,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->delete(route('books.removeCapa', $book));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('error', 'Este livro não possui capa para remover.');
+    });
 });

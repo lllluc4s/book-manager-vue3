@@ -27,5 +27,6 @@ Route::get('/authors/public', [AuthorController::class, 'publicIndex'])->name('a
 // Rotas protegidas por autenticação
 Route::middleware('auth')->group(function () {
     Route::resource('books', BookController::class);
+    Route::delete('books/{book}/capa', [BookController::class, 'removeCapa'])->name('books.removeCapa');
     Route::resource('authors', AuthorController::class);
 });
