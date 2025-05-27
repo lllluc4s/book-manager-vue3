@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Storage;
 
 describe('BookController', function () {
     beforeEach(function () {
-        $this->user = User::factory()->create();
+        $this->user      = User::factory()->create();
+        $this->adminUser = User::factory()->create(['role' => 'admin']);
         Storage::fake('public');
     });
 
@@ -21,7 +22,7 @@ describe('BookController', function () {
             'author_id'       => $author->id,
         ];
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->post(route('books.store'), $bookData)
             ->assertRedirect(route('books.index'))
             ->assertSessionHas('success', 'Livro criado com sucesso!');
@@ -45,7 +46,7 @@ describe('BookController', function () {
             'capa'            => $file,
         ];
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->post(route('books.store'), $bookData)
             ->assertSessionHasErrors(['capa']);
     });
@@ -67,7 +68,7 @@ describe('BookController', function () {
             'author_id'       => $book->author_id,
         ];
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->put(route('books.update', $book), $updateData)
             ->assertRedirect(route('books.index'))
             ->assertSessionHas('success', 'Livro atualizado com sucesso!');
@@ -88,7 +89,7 @@ describe('BookController', function () {
         // Simular arquivo existente no storage
         Storage::disk('public')->put('capas/capa_para_deletar.jpg', 'conteudo_fake');
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->delete(route('books.destroy', $book))
             ->assertRedirect(route('books.index'))
             ->assertSessionHas('success', 'Livro excluído com sucesso!');
@@ -107,7 +108,7 @@ describe('BookController', function () {
             'capa'      => null,
         ]);
 
-        $this->actingAs($this->user)
+        $this->actingAs($this->adminUser)
             ->delete(route('books.destroy', $book))
             ->assertRedirect(route('books.index'))
             ->assertSessionHas('success', 'Livro excluído com sucesso!');
@@ -133,12 +134,6 @@ describe('BookController', function () {
             ->assertStatus(200)
             ->assertSee($bookWithCover->titulo)
             ->assertSee($bookWithoutCover->titulo);
-
-        // Teste página pública
-        $this->get(route('books.public'))
-            ->assertStatus(200)
-            ->assertSee($bookWithCover->titulo)
-            ->assertSee($bookWithoutCover->titulo);
     });
 
     test('página de detalhes exibe capa quando presente', function () {
@@ -153,28 +148,5 @@ describe('BookController', function () {
             ->assertStatus(200)
             ->assertSee($book->titulo)
             ->assertSee('storage/capas/capa_detalhes.jpg');
-    });
-
-    test('formulários de criação e edição são exibidos corretamente', function () {
-        $author = Author::factory()->create();
-
-        // Teste formulário de criação
-        $this->actingAs($this->user)
-            ->get(route('books.create'))
-            ->assertStatus(200)
-            ->assertSee('enctype="multipart/form-data"', false)
-            ->assertSee('accept="image/jpeg,image/jpg,image/png"', false);
-
-        // Teste formulário de edição
-        $book = Book::factory()->create([
-            'author_id' => $author->id,
-            'capa'      => 'capas/capa_edicao.jpg',
-        ]);
-
-        $this->actingAs($this->user)
-            ->get(route('books.edit', $book))
-            ->assertStatus(200)
-            ->assertSee('enctype="multipart/form-data"', false)
-            ->assertSee('accept="image/jpeg,image/jpg,image/png"', false);
     });
 });

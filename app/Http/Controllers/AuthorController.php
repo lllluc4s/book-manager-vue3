@@ -96,14 +96,4 @@ class AuthorController extends Controller
         return redirect()->route('authors.index')
             ->with('success', 'Autor excluído com sucesso!');
     }
-
-    /**
-     * Display a listing of authors for public (non-authenticated users).
-     */
-    public function publicIndex()
-    {
-        $authors = Author::withCount('books')->latest()->paginate(10);
-
-        return view('authors.public', compact('authors'));
-    }
 }

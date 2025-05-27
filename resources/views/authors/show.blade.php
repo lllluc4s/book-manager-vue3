@@ -16,7 +16,8 @@
                             <span class="badge bg-secondary ms-2">Inativo</span>
                         @endif
                     </h4>
-                    <div class="btn-group" role="group">
+                    @if(auth()->user()->canManage())
+                    <div class="d-flex gap-2">
                         <a href="{{ route('authors.edit', $author) }}" class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
@@ -29,6 +30,7 @@
                             </button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="card-body">
@@ -57,14 +59,16 @@
                     <div class="text-center py-4">
                         <i class="bi bi-book text-muted" style="font-size: 3rem;"></i>
                         <p class="text-muted mt-2">Este autor ainda não possui livros cadastrados.</p>
+                        @if(auth()->user()->canManage())
                         <a href="{{ route('books.create') }}" class="btn btn-primary">
                             <i class="bi bi-plus-circle"></i> Adicionar Livro
                         </a>
+                        @endif
                     </div>
                 @endif
 
                 <div class="mt-4">
-                    <a href="{{ route('authors.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('authors.index') }}" class="btn btn-custom-outline">
                         <i class="bi bi-arrow-left"></i> Voltar à Lista
                     </a>
                 </div>

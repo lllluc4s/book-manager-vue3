@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Storage;
 
 describe('Book Capa (Upload de Capas)', function () {
     beforeEach(function () {
-        $this->user = User::factory()->create();
+        $this->user      = User::factory()->create();
+        $this->adminUser = User::factory()->create(['role' => 'admin']);
         Storage::fake('public');
     });
 
@@ -16,7 +17,7 @@ describe('Book Capa (Upload de Capas)', function () {
         $author = Author::factory()->create();
         $file   = UploadedFile::fake()->image('capa.jpg', 300, 300)->size(1024);
 
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro com Capa',
                 'descricao'       => 'Descrição do livro',
@@ -39,7 +40,7 @@ describe('Book Capa (Upload de Capas)', function () {
 
         // Teste arquivo inválido (não é imagem)
         $fileInvalido = UploadedFile::fake()->create('documento.txt', 100, 'text/plain');
-        $response     = $this->actingAs($this->user)
+        $response     = $this->actingAs($this->adminUser)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Teste',
                 'descricao'       => 'Descrição do livro',
@@ -51,7 +52,7 @@ describe('Book Capa (Upload de Capas)', function () {
 
         // Teste arquivo muito grande
         $fileMuitoGrande = UploadedFile::fake()->image('capa.jpg', 500, 500)->size(3072); // 3MB
-        $response        = $this->actingAs($this->user)
+        $response        = $this->actingAs($this->adminUser)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Teste 2',
                 'descricao'       => 'Descrição do livro',
@@ -66,7 +67,7 @@ describe('Book Capa (Upload de Capas)', function () {
         $author = Author::factory()->create();
         $file   = UploadedFile::fake()->image('capa_grande.jpg', 800, 600)->size(1000);
 
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Redimensionado',
                 'descricao'       => 'Teste de redimensionamento',
@@ -95,7 +96,7 @@ describe('Book Capa (Upload de Capas)', function () {
 
         $newFile = UploadedFile::fake()->image('nova_capa.png', 200, 200)->size(500);
 
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->put(route('books.update', $book), [
                 'titulo'          => $book->titulo,
                 'descricao'       => $book->descricao,
@@ -121,7 +122,7 @@ describe('Book Capa (Upload de Capas)', function () {
         $file   = UploadedFile::fake()->image('capa_deletar.jpg', 200, 200)->size(500);
 
         // Criar livro com capa
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Para Deletar',
                 'descricao'       => 'Será deletado',
@@ -137,7 +138,7 @@ describe('Book Capa (Upload de Capas)', function () {
         Storage::disk('public')->assertExists($capaPath);
 
         // Deletar o livro
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->delete(route('books.destroy', $book));
 
         $response->assertRedirect(route('books.index'));
@@ -154,7 +155,7 @@ describe('Book Capa (Upload de Capas)', function () {
         $file   = UploadedFile::fake()->image('capa_remover.jpg', 200, 200)->size(500);
 
         // Criar livro com capa
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->post(route('books.store'), [
                 'titulo'          => 'Livro Com Capa',
                 'descricao'       => 'Terá capa removida',
@@ -171,7 +172,7 @@ describe('Book Capa (Upload de Capas)', function () {
         expect($book->capa)->not->toBeNull();
 
         // Remover apenas a capa
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->delete(route('books.removeCapa', $book));
 
         $response->assertRedirect();
@@ -194,7 +195,7 @@ describe('Book Capa (Upload de Capas)', function () {
             'capa'      => null,
         ]);
 
-        $response = $this->actingAs($this->user)
+        $response = $this->actingAs($this->adminUser)
             ->delete(route('books.removeCapa', $book));
 
         $response->assertRedirect();

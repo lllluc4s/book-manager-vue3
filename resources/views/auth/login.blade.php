@@ -3,15 +3,16 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white text-center">
-                <h4 class="mb-0">
-                    <i class="bi bi-person-circle me-2"></i>
-                    Login
-                </h4>
-            </div>
+<div class="login-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Login
+                    </h4>
+                </div>
             <div class="card-body p-4">
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -86,10 +87,10 @@
                 <div class="text-center">
                     <small class="text-muted">
                         <strong>Usuários de teste:</strong><br>
-                        admin@test.com / password123<br>
-                        user@test.com / password123
+                        admin@test.com / password<br>
+                        user@test.com / password
                     </small>
-                </div>
+                </div>                </div>
             </div>
         </div>
     </div>

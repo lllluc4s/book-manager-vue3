@@ -32,7 +32,7 @@ describe('Saúde Essencial do Sistema', function () {
 
     test('rota inicial funciona', function () {
         $response = $this->get('/');
-        expect($response->status())->toBe(302); // Deve redirecionar
+        expect($response->status())->toBe(200); // Deve retornar a página de boas-vindas
     });
 
     test('configuração básica é válida', function () {

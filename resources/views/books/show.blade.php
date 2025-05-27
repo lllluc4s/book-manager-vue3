@@ -9,19 +9,21 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="bi bi-book"></i> {{ $book->titulo }}</h4>
-                    <div class="btn-group" role="group">
-                        <a href="{{ route('books.edit', $book) }}" class="btn btn-custom-outline btn-sm">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                        <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
-                              onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                <i class="bi bi-trash"></i> Excluir
-                            </button>
-                        </form>
-                    </div>
+                    @if(auth()->user()->canManage())
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('books.edit', $book) }}" class="btn btn-custom-outline btn-sm">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
+                                  onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Excluir
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

@@ -102,7 +102,7 @@
 }
 
 .card-header {
-  background-color: #f8f9fa !important;
+  background-color: var(--primary-color) !important;
   border-bottom-color: var(--border-color) !important;
 }
 
@@ -156,4 +156,17 @@ a:hover {
   border-color: #198754 !important;
   background-color: #d1eddd !important;
   color: #0f5132 !important;
+}
+
+/* Centralização da página de login */
+.login-container {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container .row {
+  width: 100%;
+  margin: 0;
 }
