@@ -31,10 +31,13 @@ class AuthorController extends Controller
     {
         $request->validate([
             'nome'   => 'required|string|max:255',
-            'estado' => 'boolean',
+            'estado' => 'nullable|boolean',
         ]);
 
-        Author::create($request->all());
+        $data = $request->only(['nome']);
+        $data['estado'] = $request->has('estado') && $request->estado == '1';
+
+        Author::create($data);
 
         return redirect()->route('authors.index')
             ->with('success', 'Autor criado com sucesso!');
@@ -65,10 +68,13 @@ class AuthorController extends Controller
     {
         $request->validate([
             'nome'   => 'required|string|max:255',
-            'estado' => 'boolean',
+            'estado' => 'nullable|boolean',
         ]);
 
-        $author->update($request->all());
+        $data = $request->only(['nome']);
+        $data['estado'] = $request->has('estado') && $request->estado == '1';
+
+        $author->update($data);
 
         return redirect()->route('authors.index')
             ->with('success', 'Autor atualizado com sucesso!');

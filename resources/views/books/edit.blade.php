@@ -5,7 +5,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
+        <div class="card card-custom">
             <div class="card-header">
                 <h4 class="mb-0"><i class="bi bi-pencil"></i> Editar Livro</h4>
             </div>
@@ -60,10 +60,10 @@
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <a href="{{ route('books.show', $book) }}" class="btn btn-secondary">
+                        <a href="{{ route('books.show', $book) }}" class="btn btn-custom-outline">
                             <i class="bi bi-arrow-left"></i> Voltar
                         </a>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-custom-primary">
                             <i class="bi bi-check-circle"></i> Atualizar Livro
                         </button>
                     </div>

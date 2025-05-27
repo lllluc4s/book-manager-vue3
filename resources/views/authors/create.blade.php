@@ -5,7 +5,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card card-custom">
             <div class="card-header">
                 <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Criar Novo Autor</h4>
             </div>
@@ -24,6 +24,7 @@
 
                     <div class="mb-3">
                         <div class="form-check">
+                            <input type="hidden" name="estado" value="0">
                             <input class="form-check-input" type="checkbox" id="estado" name="estado" value="1" 
                                    {{ old('estado', true) ? 'checked' : '' }}>
                             <label class="form-check-label" for="estado">
@@ -36,10 +37,10 @@
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <a href="{{ route('authors.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('authors.index') }}" class="btn btn-custom-outline">
                             <i class="bi bi-arrow-left"></i> Voltar
                         </a>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-custom-primary">
                             <i class="bi bi-check-circle"></i> Salvar Autor
                         </button>
                     </div>

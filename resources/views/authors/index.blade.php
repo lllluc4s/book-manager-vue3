@@ -5,13 +5,13 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1><i class="bi bi-person"></i> Lista de Autores</h1>
-    <a href="{{ route('authors.create') }}" class="btn btn-primary">
+    <a href="{{ route('authors.create') }}" class="btn btn-custom-primary">
         <i class="bi bi-plus-circle"></i> Novo Autor
     </a>
 </div>
 
 @if($authors->count() > 0)
-    <div class="card">
+    <div class="card card-custom">
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -39,10 +39,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('authors.show', $author) }}" class="btn btn-outline-primary btn-sm">
+                                        <a href="{{ route('authors.show', $author) }}" class="btn btn-custom-outline btn-sm">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a href="{{ route('authors.edit', $author) }}" class="btn btn-outline-secondary btn-sm">
+                                        <a href="{{ route('authors.edit', $author) }}" class="btn btn-custom-outline btn-sm">
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         <form action="{{ route('authors.destroy', $author) }}" method="POST" class="d-inline" 
@@ -72,7 +72,7 @@
         <i class="bi bi-person display-1 text-muted"></i>
         <h3 class="text-muted mt-3">Nenhum autor encontrado</h3>
         <p class="text-muted">Comece adicionando seu primeiro autor!</p>
-        <a href="{{ route('authors.create') }}" class="btn btn-primary">
+        <a href="{{ route('authors.create') }}" class="btn btn-custom-primary">
             <i class="bi bi-plus-circle"></i> Adicionar Autor
         </a>
     </div>

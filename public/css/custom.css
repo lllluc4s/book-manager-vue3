@@ -52,6 +52,40 @@
   border-color: #555 !important;
 }
 
+/* Classes personalizadas */
+.btn-custom-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--background-color) !important;
+}
+
+.btn-custom-primary:hover {
+  background-color: #555 !important;
+  border-color: #555 !important;
+  color: var(--background-color) !important;
+}
+
+.btn-custom-outline {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  background-color: transparent !important;
+}
+
+.btn-custom-outline:hover {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--background-color) !important;
+}
+
+.card-custom {
+  border-color: var(--border-color) !important;
+}
+
+.card-custom .card-header {
+  background-color: #f8f9fa !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
 .btn-outline-primary {
   color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
