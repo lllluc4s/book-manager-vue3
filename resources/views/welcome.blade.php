@@ -102,10 +102,10 @@
             </svg>
         </div>
         
-        <h1>Sistema de Gestão de Livros</h1>
+        <h1>Gestão de Livros</h1>
         
         <p class="login-message">
-            Para acessar a plataforma é necessário fazer login
+            Faça login para acessar o sistema =)
         </p>
         
         <a href="{{ route('login') }}" class="login-btn">
