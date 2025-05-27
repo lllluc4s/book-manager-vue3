@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('books.index') }}">
+            <a class="navbar-brand" href="{{ auth()->check() ? route('books.index') : route('home') }}">
                 <i class="bi bi-book"></i> Gestão de Livros
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -28,17 +28,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('authors.*') ? 'active' : '' }}" href="{{ route('authors.index') }}">
-                                <i class="bi bi-person"></i> Autores
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('books.public') }}">
-                                <i class="bi bi-book"></i> Livros
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('authors.public') }}">
                                 <i class="bi bi-person"></i> Autores
                             </a>
                         </li>

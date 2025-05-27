@@ -9,13 +9,13 @@ describe('Controllers Essenciais', function () {
         $this->user = User::factory()->create();
     });
 
-    test('página inicial de livros funciona', function () {
-        $response = $this->get(route('books.public'));
+    test('página inicial de livros funciona para usuários logados', function () {
+        $response = $this->actingAs($this->user)->get(route('books.index'));
         expect($response->status())->toBe(200);
     });
 
-    test('página inicial de autores funciona', function () {
-        $response = $this->get(route('authors.public'));
+    test('página inicial de autores funciona para usuários logados', function () {
+        $response = $this->actingAs($this->user)->get(route('authors.index'));
         expect($response->status())->toBe(200);
     });
 

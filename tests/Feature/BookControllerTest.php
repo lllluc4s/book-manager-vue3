@@ -133,12 +133,6 @@ describe('BookController', function () {
             ->assertStatus(200)
             ->assertSee($bookWithCover->titulo)
             ->assertSee($bookWithoutCover->titulo);
-
-        // Teste página pública
-        $this->get(route('books.public'))
-            ->assertStatus(200)
-            ->assertSee($bookWithCover->titulo)
-            ->assertSee($bookWithoutCover->titulo);
     });
 
     test('página de detalhes exibe capa quando presente', function () {

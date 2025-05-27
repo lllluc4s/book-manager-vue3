@@ -12,23 +12,25 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criar usuário de teste para a API
+        // Criar usuário admin
         User::firstOrCreate(
             ['email' => 'admin@test.com'],
             [
                 'name'     => 'Admin Teste',
                 'email'    => 'admin@test.com',
                 'password' => Hash::make('password'),
+                'role'     => 'admin',
             ]
         );
 
-        // Criar usuário adicional
+        // Criar usuário comum
         User::firstOrCreate(
             ['email' => 'user@test.com'],
             [
                 'name'     => 'Usuário Teste',
                 'email'    => 'user@test.com',
                 'password' => Hash::make('password'),
+                'role'     => 'user',
             ]
         );
     }

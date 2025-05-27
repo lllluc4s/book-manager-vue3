@@ -21,16 +21,6 @@ class BookController extends Controller
     }
 
     /**
-     * Display a listing of books for public (non-authenticated users).
-     */
-    public function publicIndex()
-    {
-        $books = Book::with('author')->latest()->paginate(10);
-
-        return view('books.public', compact('books'));
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()

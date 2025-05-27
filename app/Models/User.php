@@ -27,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -50,5 +51,37 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user is admin.
+     */
+    public function isAdmin(): bool
+    {
+        return 'admin' === $this->role;
+    }
+
+    /**
+     * Check if user is regular user.
+     */
+    public function isUser(): bool
+    {
+        return 'user' === $this->role;
+    }
+
+    /**
+     * Check if user can perform admin actions (create, edit, delete).
+     */
+    public function canManage(): bool
+    {
+        return $this->isAdmin();
+    }
+
+    /**
+     * Check if user can only view (read-only access).
+     */
+    public function canOnlyView(): bool
+    {
+        return $this->isUser();
     }
 }
