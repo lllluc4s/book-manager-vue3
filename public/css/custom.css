@@ -144,3 +144,16 @@ a:hover {
 .bi {
   color: inherit !important;
 }
+
+/* Alerts personalizados */
+.alert-danger {
+  border-color: #dc3545 !important;
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+.alert-success {
+  border-color: #198754 !important;
+  background-color: #d1eddd !important;
+  color: #0f5132 !important;
+}

@@ -46,7 +46,7 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         <form action="{{ route('authors.destroy', $author) }}" method="POST" class="d-inline" 
-                                              onsubmit="return confirm('Tem certeza que deseja excluir este autor?')">
+                                              onsubmit="return confirm('Tem certeza que deseja excluir este autor? Esta ação não pode ser desfeita. ATENÇÃO: Não será possível excluir se houver livros associados.')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm">

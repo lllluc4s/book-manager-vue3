@@ -85,6 +85,12 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
+        // Verificar se o autor possui livros associados
+        if ($author->books()->count() > 0) {
+            return redirect()->route('authors.index')
+                ->with('error', 'Não é possível excluir este autor pois ele possui livros associados. Remova os livros primeiro ou transfira-os para outro autor.');
+        }
+
         $author->delete();
 
         return redirect()->route('authors.index')
