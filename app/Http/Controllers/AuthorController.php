@@ -34,8 +34,8 @@ class AuthorController extends Controller
             'estado' => 'nullable|boolean',
         ]);
 
-        $data = $request->only(['nome']);
-        $data['estado'] = $request->has('estado') && $request->estado == '1';
+        $data           = $request->only(['nome']);
+        $data['estado'] = $request->has('estado') && '1' == $request->estado;
 
         Author::create($data);
 
@@ -71,8 +71,8 @@ class AuthorController extends Controller
             'estado' => 'nullable|boolean',
         ]);
 
-        $data = $request->only(['nome']);
-        $data['estado'] = $request->has('estado') && $request->estado == '1';
+        $data           = $request->only(['nome']);
+        $data['estado'] = $request->has('estado') && '1' == $request->estado;
 
         $author->update($data);
 
