@@ -27,6 +27,7 @@ Sistema Laravel completo para gestão de livros e autores com interface web mode
 - **Banco:** MySQL/MariaDB
 - **API:** Laravel Sanctum
 - **Autenticação:** Laravel Auth
+- **Testes:** Pest 3.8.2 (framework moderno de testes)
 
 ## 📦 Instalação e Configuração
 
@@ -137,3 +138,44 @@ users: id, name, email, password, timestamps
 - Obtenha token em `/api/auth/login`
 - Use o token no header: `Authorization: Bearer {token}`
 - Acesse endpoints protegidos
+
+## 🧪 Verificação da Saúde do Sistema
+
+O sistema inclui uma suíte de testes automatizados que substitui o antigo script `check-system.sh`, oferecendo verificações mais robustas e confiáveis.
+
+### Executar Testes de Saúde
+
+```bash
+# Executar todos os testes de verificação
+./vendor/bin/pest
+
+# Executar apenas testes específicos
+./vendor/bin/pest tests/Feature/SystemHealthTest.php
+./vendor/bin/pest tests/Feature/ControllersHealthTest.php
+```
+
+### O que é Verificado
+
+**SystemHealthTest (Infraestrutura):**
+
+- ✅ Conexão com banco de dados
+- ✅ Existência das tabelas principais (authors, books)
+- ✅ Funcionamento dos Models (Author, Book)
+- ✅ Rota inicial da aplicação
+- ✅ Configurações básicas (APP_KEY, database)
+
+**ControllersHealthTest (Funcionalidades):**
+
+- ✅ Páginas públicas (catálogo de livros e autores)
+- ✅ Criação de autores (área administrativa)
+- ✅ Criação de livros (área administrativa)
+- ✅ API REST básica de autores
+
+**Resultado Esperado:**
+
+```
+Tests:    12 passed (23 assertions)
+Duration: < 1s
+```
+
+## 📦 Instalação e Configuração
