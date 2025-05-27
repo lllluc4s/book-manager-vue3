@@ -29,9 +29,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('user', [AuthController::class, 'user']);
     });
 
-    // Rotas de autores
-    Route::apiResource('authors', AuthorApiController::class);
-
-    // Rota para obter livros de um autor específico
-    Route::get('authors/{id}/books', [AuthorApiController::class, 'books']);
+    // API de Autores (protegida)
+    Route::apiResource('authors', AuthorApiController::class)->names([
+        'index'   => 'api.authors.index',
+        'store'   => 'api.authors.store',
+        'show'    => 'api.authors.show',
+        'update'  => 'api.authors.update',
+        'destroy' => 'api.authors.destroy',
+    ]);
+    Route::get('authors/{id}/books', [AuthorApiController::class, 'books'])->name('api.authors.books');
 });
