@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body pt-4">
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <h6 class="text-muted">Capa</h6>
