@@ -1,2 +1,21 @@
+# Robots.txt para Book Manager
+# Permite acesso a todas as páginas públicas
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Bloqueia acesso a áreas administrativas e arquivos sensíveis
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /api/
+Disallow: /_debugbar/
+Disallow: /storage/logs/
+Disallow: /vendor/
+
+# Permite acesso aos livros e páginas públicas
+Allow: /books/
+Allow: /categories/
+Allow: /authors/
+Allow: /search
