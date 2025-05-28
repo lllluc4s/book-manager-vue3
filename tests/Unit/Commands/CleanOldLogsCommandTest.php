@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit\Commands;
 
 use Carbon\Carbon;
@@ -15,15 +14,15 @@ class CleanOldLogsCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Mock do canal scheduler para evitar erros nos testes
         LaravelLog::shouldReceive('channel')
             ->with('scheduler')
             ->andReturnSelf();
-            
+
         LaravelLog::shouldReceive('info')
             ->andReturn(true);
-            
+
         LaravelLog::shouldReceive('error')
             ->andReturn(true);
     }
@@ -32,7 +31,7 @@ class CleanOldLogsCommandTest extends TestCase
     public function it_removes_old_logs_older_than_30_days_by_default()
     {
         // Arrange: Criar logs antigos e recentes
-        $oldDate = Carbon::now()->subDays(35);
+        $oldDate    = Carbon::now()->subDays(35);
         $recentDate = Carbon::now()->subDays(15);
 
         // Logs antigos (devem ser removidos)
@@ -62,8 +61,8 @@ class CleanOldLogsCommandTest extends TestCase
     {
         // Arrange: Criar logs com diferentes idades
         $veryOldDate = Carbon::now()->subDays(50);
-        $oldDate = Carbon::now()->subDays(20);
-        $recentDate = Carbon::now()->subDays(5);
+        $oldDate     = Carbon::now()->subDays(20);
+        $recentDate  = Carbon::now()->subDays(5);
 
         Log::factory()->create(['created_at' => $veryOldDate, 'message' => 'Log muito antigo']);
         Log::factory()->create(['created_at' => $oldDate, 'message' => 'Log antigo']);

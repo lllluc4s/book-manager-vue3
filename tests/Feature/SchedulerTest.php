@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -41,7 +40,7 @@ class SchedulerTest extends TestCase
         // Act & Assert: Verificar se o comando schedule:list executa sem erro
         $this->artisan('schedule:list')
             ->assertExitCode(0);
-            
+
         // O teste passou se chegou até aqui sem exceções
         $this->assertTrue(true, 'Comando schedule:list executado com sucesso');
     }

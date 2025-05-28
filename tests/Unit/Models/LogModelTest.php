@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit\Models;
 
 use Carbon\Carbon;
@@ -16,17 +15,17 @@ class LogModelTest extends TestCase
     {
         // Arrange & Act
         $log = Log::create([
-            'level' => 'info',
+            'level'   => 'info',
             'message' => 'Test log message',
             'context' => ['key' => 'value'],
-            'channel' => 'testing'
+            'channel' => 'testing',
         ]);
 
         // Assert
         $this->assertDatabaseHas('logs', [
-            'level' => 'info',
+            'level'   => 'info',
             'message' => 'Test log message',
-            'channel' => 'testing'
+            'channel' => 'testing',
         ]);
 
         $this->assertEquals(['key' => 'value'], $log->context);
@@ -37,10 +36,10 @@ class LogModelTest extends TestCase
     {
         // Arrange & Act
         $log = Log::create([
-            'level' => 'error',
+            'level'   => 'error',
             'message' => 'Error message',
             'context' => ['error' => 'Something went wrong', 'code' => 500],
-            'channel' => 'app'
+            'channel' => 'app',
         ]);
 
         // Assert
@@ -53,10 +52,10 @@ class LogModelTest extends TestCase
     public function scope_old_logs_returns_logs_older_than_specified_days()
     {
         // Arrange
-        $oldDate = Carbon::now()->subDays(35);
+        $oldDate    = Carbon::now()->subDays(35);
         $recentDate = Carbon::now()->subDays(15);
 
-        $oldLog = Log::factory()->create(['created_at' => $oldDate]);
+        $oldLog    = Log::factory()->create(['created_at' => $oldDate]);
         $recentLog = Log::factory()->create(['created_at' => $recentDate]);
 
         // Act
@@ -77,7 +76,7 @@ class LogModelTest extends TestCase
 
         // Act
         $errorLogs = Log::byLevel('error')->get();
-        $infoLogs = Log::byLevel('info')->get();
+        $infoLogs  = Log::byLevel('info')->get();
 
         // Assert
         $this->assertCount(1, $errorLogs);
@@ -96,7 +95,7 @@ class LogModelTest extends TestCase
 
         // Act
         $schedulerLogs = Log::byChannel('scheduler')->get();
-        $appLogs = Log::byChannel('app')->get();
+        $appLogs       = Log::byChannel('app')->get();
 
         // Assert
         $this->assertCount(1, $schedulerLogs);
@@ -109,25 +108,25 @@ class LogModelTest extends TestCase
     public function it_can_combine_scopes()
     {
         // Arrange
-        $oldDate = Carbon::now()->subDays(35);
+        $oldDate    = Carbon::now()->subDays(35);
         $recentDate = Carbon::now()->subDays(15);
 
         Log::factory()->create([
-            'level' => 'error',
-            'channel' => 'app',
-            'created_at' => $oldDate
+            'level'      => 'error',
+            'channel'    => 'app',
+            'created_at' => $oldDate,
         ]);
 
         Log::factory()->create([
-            'level' => 'error',
-            'channel' => 'scheduler',
-            'created_at' => $oldDate
+            'level'      => 'error',
+            'channel'    => 'scheduler',
+            'created_at' => $oldDate,
         ]);
 
         Log::factory()->create([
-            'level' => 'info',
-            'channel' => 'app',
-            'created_at' => $recentDate
+            'level'      => 'info',
+            'channel'    => 'app',
+            'created_at' => $recentDate,
         ]);
 
         // Act
