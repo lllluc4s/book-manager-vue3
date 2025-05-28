@@ -1,181 +1,150 @@
 # 📚 Sistema de Gestão de Livros
 
-Sistema Laravel completo para gestão de livros e autores com interface web moderna e API REST.
+Sistema Laravel para gestão de livros e autores. Inclui interface web, API REST com autenticação, upload de imagens, middleware de segurança e sistema de agendamento de tarefas.
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades Principais
 
-### 🌐 Sistema Web
-
-- ✅ Interface responsiva com Bootstrap 5
-- ✅ CRUD completo para Livros e Autores
-- ✅ Sistema de autenticação integrado
-- ✅ Área pública (catálogo) sem login
-- ✅ Área administrativa protegida
-- ✅ Relacionamentos entre entidades
-
-### 🔌 API REST
-
-- ✅ Autenticação com Laravel Sanctum
-- ✅ Endpoints para gestão de autores
-- ✅ Proteção por tokens de acesso
-- ✅ Documentação da API incluída
+- ✅ **CRUD** de livros e autores com interface Blade responsiva
+- ✅ **Upload de capas** com redimensionamento automático (200x200px)
+- ✅ **API REST** com autenticação Laravel Sanctum
+- ✅ **Sistema de autenticação** com controle de permissões (admin/usuário)
+- ✅ **Middleware de segurança** para proteção de rotas administrativas
+- ✅ **Scheduler** para limpeza automática de logs antigos
+- ✅ **Relacionamentos** entre livros e autores
+- ✅ **Validação** de formulários e uploads
 
 ## 🛠️ Tecnologias
 
-- **Framework:** Laravel 10
-- **Frontend:** Blade + Bootstrap 5
-- **Banco:** MySQL/MariaDB
-- **API:** Laravel Sanctum
-- **Autenticação:** Laravel Auth
-- **Testes:** Pest 3.8.2 (framework moderno de testes)
+- **PHP:** 8.3+
+- **Framework:** Laravel 12.15
+- **Frontend:** Blade Templates + Bootstrap 5
+- **Banco de Dados:** MySQL 8.0+
+- **Autenticação API:** Laravel Sanctum
+- **Processamento de Imagens:** Intervention Image 3.11
+- **Testes:** Pest 3.8
 
 ## 📦 Instalação e Configuração
 
-### 1. Clonar e Instalar Dependências
+### 1. Pré-requisitos
+
+- PHP >= 8.3
+- MySQL >= 8.0
+- Composer
+- Node.js (opcional, para assets)
+
+### 2. Instalação
 
 ```bash
-git clone <repository>
+# Clonar o repositório
+git clone <repository-url>
 cd book-manager
+
+# Instalar dependências
 composer install
-```
 
-### 2. Configurar Ambiente
-
-```bash
+# Configurar ambiente
 cp .env.example .env
 php artisan key:generate
 ```
 
 ### 3. Configurar Banco de Dados
 
-Edite o arquivo `.env`:
+Edite o arquivo `.env` com suas credenciais:
 
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=book_manager
-DB_USERNAME=laravel
-DB_PASSWORD=laravel123
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
 ```
 
-### 4. Executar Migrações e Seeders
+### 4. Inicializar o Sistema
 
 ```bash
-php artisan migrate
-php artisan db:seed
-```
+# Executar migrações e popular dados
+php artisan migrate --seed
 
-### 5. Iniciar Servidor
+# Criar link simbólico para storage
+php artisan storage:link
 
-```bash
+# Iniciar servidor de desenvolvimento
 php artisan serve
 ```
 
-Acesse: `http://127.0.0.1:8000`
+Acesse: `http://localhost:8000`
 
 ## 👤 Usuários de Teste
 
-- **Admin:** admin@test.com / password
-- **User:** user@test.com / password
+- **Administrador:** admin@test.com / password
+- **Usuário:** user@test.com / password
 
-## 📖 Documentação
-
-- **[Documentação Web](WEB_DOCUMENTATION.md)** - Guia completo do sistema web
-- **[Documentação API](API_DOCUMENTATION.md)** - Referência da API REST
-
-## 🌍 URLs Principais
+## 🌍 Principais Rotas
 
 ### Sistema Web
 
-| URL               | Descrição                 |
-| ----------------- | ------------------------- |
-| `/`               | Página inicial            |
-| `/login`          | Login do sistema          |
-| `/books/public`   | Catálogo público          |
-| `/authors/public` | Autores (público)         |
-| `/books`          | Gestão de livros (admin)  |
-| `/authors`        | Gestão de autores (admin) |
+- `/` - Página inicial
+- `/login` - Login do sistema
+- `/books` - Gestão de livros (requer admin)
+- `/authors` - Gestão de autores (requer admin)
 
 ### API REST
 
-| Endpoint                      | Descrição           |
-| ----------------------------- | ------------------- |
-| `POST /api/auth/register`     | Registrar usuário   |
-| `POST /api/auth/login`        | Login e obter token |
-| `GET /api/authors`            | Listar autores      |
-| `POST /api/authors`           | Criar autor         |
-| `GET /api/authors/{id}/books` | Livros do autor     |
+- `POST /api/auth/login` - Autenticação
+- `GET /api/authors` - Listar autores
+- `GET /api/authors/{id}/books` - Livros do autor
+- **Headers:** `Authorization: Bearer {token}`
 
-## 📊 Estrutura do Banco
+## 🗄️ Estrutura do Banco
 
 ```sql
 -- Autores
 authors: id, nome, estado, timestamps
 
 -- Livros
-books: id, titulo, descricao, data_publicacao, author_id, timestamps
+books: id, titulo, descricao, data_publicacao, author_id, capa, timestamps
 
 -- Usuários
-users: id, name, email, password, timestamps
+users: id, name, email, password, role, timestamps
+
+-- Logs (para scheduler)
+logs: id, level, message, context, channel, timestamps
 ```
 
-## 🎯 Como Usar
-
-### 1. Acesso Público
-
-- Visite `/books/public` para ver o catálogo
-- Navegue por `/authors/public` para conhecer os autores
-
-### 2. Acesso Administrativo
-
-- Faça login em `/login`
-- Gerencie livros em `/books`
-- Gerencie autores em `/authors`
-
-### 3. API
-
-- Obtenha token em `/api/auth/login`
-- Use o token no header: `Authorization: Bearer {token}`
-- Acesse endpoints protegidos
-
-## 🧪 Verificação da Saúde do Sistema
-
-O sistema inclui uma suíte de testes automatizados que substitui o antigo script `check-system.sh`, oferecendo verificações mais robustas e confiáveis.
-
-### Executar Testes de Saúde
+## ⚙️ Comandos Úteis
 
 ```bash
-# Executar todos os testes de verificação
+# Executar testes
 ./vendor/bin/pest
 
-# Executar apenas testes específicos
+# Limpar logs manualmente
+php artisan logs:clean-old
+
+# Verificar scheduler
+php artisan schedule:list
+
+# Rodar migrações fresh (cuidado: apaga dados!)
+php artisan migrate:fresh --seed
+```
+
+## 🧪 Testes de Verificação
+
+O sistema inclui testes automatizados para validar funcionalidades:
+
+```bash
+# Executar todos os testes
+./vendor/bin/pest
+
+# Testes específicos
 ./vendor/bin/pest tests/Feature/SystemHealthTest.php
-./vendor/bin/pest tests/Feature/ControllersHealthTest.php
 ```
 
-### O que é Verificado
+## 📄 Documentação Adicional
 
-**SystemHealthTest (Infraestrutura):**
+- **[API Documentation](API_DOCUMENTATION.md)** - Referência completa da API
+- **[Web Documentation](WEB_DOCUMENTATION.md)** - Guia do sistema web
 
-- ✅ Conexão com banco de dados
-- ✅ Existência das tabelas principais (authors, books)
-- ✅ Funcionamento dos Models (Author, Book)
-- ✅ Rota inicial da aplicação
-- ✅ Configurações básicas (APP_KEY, database)
+---
 
-**ControllersHealthTest (Funcionalidades):**
-
-- ✅ Páginas públicas (catálogo de livros e autores)
-- ✅ Criação de autores (área administrativa)
-- ✅ Criação de livros (área administrativa)
-- ✅ API REST básica de autores
-
-**Resultado Esperado:**
-
-```
-Tests:    12 passed (23 assertions)
-Duration: < 1s
-```
-
-## 📦 Instalação e Configuração
+**Desenvolvido por Lucas Rodrigues**

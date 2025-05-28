@@ -1,69 +1,51 @@
-# Sistema de Gestão de Livros - Documentação Web
+# 🌐 Sistema Web - Gestão de Livros
 
-## Visão Geral
+Sistema Laravel com interface web responsiva para gestão de livros e autores.
 
-Sistema Laravel completo para gestão de livros com interface web responsiva usando Blade templates e Bootstrap 5. O sistema oferece funcionalidades para gerenciar autores e livros com autenticação de usuários.
+## 🗄️ Estrutura do Banco de Dados
 
-## Características Principais
+### Tabela Authors
 
--   ✅ CRUD completo para Livros e Autores
--   ✅ Sistema de autenticação web integrado
--   ✅ Interface responsiva com Bootstrap 5
--   ✅ Visualização pública (catálogo) sem autenticação
--   ✅ Área administrativa protegida por login
--   ✅ Relacionamentos entre entidades (Author → Books)
--   ✅ Validação de dados e proteção contra exclusão
--   ✅ Banco de dados MySQL configurado
--   ✅ Seeders com dados de exemplo
+```sql
+id (PK), nome, estado (boolean), created_at, updated_at
+```
 
-## Estrutura do Sistema
+### Tabela Books
 
-### Banco de Dados
+```sql
+id (PK), titulo, descricao, data_publicacao, author_id (FK), capa, created_at, updated_at
+```
 
-**Tabela Authors:**
+### Tabela Users
 
--   id (PK)
--   nome (string, 255)
--   estado (string, 2)
--   created_at, updated_at
+```sql
+id (PK), name, email (unique), password, role, created_at, updated_at
+```
 
-**Tabela Books:**
+### Tabela Logs
 
--   id (PK)
--   titulo (string, 255)
--   descricao (text)
--   data_publicacao (date)
--   author_id (FK → authors.id)
--   created_at, updated_at
+```sql
+id (PK), level, message, context (JSON), channel, created_at, updated_at
+```
 
-**Tabela Users:**
-
--   id (PK)
--   name (string)
--   email (string, unique)
--   password (hash)
--   email_verified_at
--   created_at, updated_at
-
-### Usuários de Teste
+## 👤 Usuários de Teste
 
 Criados via seeders:
 
--   **Admin:** admin@test.com / password
--   **User:** user@test.com / password
+- **Administrador:** admin@test.com / password
+- **Usuário:** user@test.com / password
 
-## URLs e Funcionalidades
+## 🌍 URLs e Funcionalidades
 
-### Área Pública (Sem Autenticação)
+### Sistema de Autenticação
 
-| URL               | Descrição                  |
-| ----------------- | -------------------------- |
-| `/`               | Página inicial             |
-| `/login`          | Formulário de login        |
-| `/books/public`   | Catálogo público de livros |
-| `/authors/public` | Lista pública de autores   |
+| URL       | Método | Descrição           |
+| --------- | ------ | ------------------- |
+| `/login`  | GET    | Formulário de login |
+| `/login`  | POST   | Processar login     |
+| `/logout` | POST   | Fazer logout        |
 
-### Área Administrativa (Requer Login)
+### Área Administrativa (Requer Login + Permissão Admin)
 
 #### Gestão de Livros
 
@@ -76,6 +58,7 @@ Criados via seeders:
 | `/books/{id}/edit` | GET    | Formulário de edição  |
 | `/books/{id}`      | PUT    | Atualizar livro       |
 | `/books/{id}`      | DELETE | Excluir livro         |
+| `/books/{id}/capa` | DELETE | Remover capa do livro |
 
 #### Gestão de Autores
 
@@ -89,125 +72,78 @@ Criados via seeders:
 | `/authors/{id}`      | PUT    | Atualizar autor                     |
 | `/authors/{id}`      | DELETE | Excluir autor (se não tiver livros) |
 
-### Sistema de Autenticação
+## 🔒 Funcionalidades de Segurança
 
-| URL       | Método | Descrição                  |
-| --------- | ------ | -------------------------- |
-| `/login`  | GET    | Exibir formulário de login |
-| `/login`  | POST   | Processar login            |
-| `/logout` | POST   | Fazer logout               |
+### Middleware de Administrador
 
-## Interface do Usuário
+- **Verificação de permissões** em todas as rotas administrativas
+- **Erro 403** para usuários não autorizados
+- **Redirecionamento automático** para login quando não autenticado
 
-### Layout Principal
+### Validação e Proteção
 
--   **Navbar responsiva** com Bootstrap 5
--   **Logo/título** do sistema
--   **Menu de navegação** dinâmico baseado no status de autenticação
--   **Botões de ação** com ícones Bootstrap Icons
--   **Alertas** para feedback de ações
--   **Design mobile-first** totalmente responsivo
+- **Proteção CSRF** nos formulários
+- **Validação de uploads** (JPG/PNG, máx 2MB)
+- **Proteção contra exclusão** de autores com livros associados
+- **Sanitização** de dados de entrada
 
-### Páginas Públicas
+## 📷 Sistema de Upload de Imagens
 
--   **Catálogo de Livros:** Cards responsivos com informações do livro
--   **Lista de Autores:** Cards com nome, estado e quantidade de livros
--   **Design atrativo** com cores e ícones
+### Características
 
-### Páginas Administrativas
+- **Formatos aceitos:** JPG, PNG
+- **Tamanho máximo:** 2MB
+- **Redimensionamento automático:** 200x200 pixels
+- **Armazenamento:** storage/app/public/capas/
+- **Visualização:** Preview na edição e detalhes
 
--   **Tabelas responsivas** para listagem
--   **Formulários validados** para criação/edição
--   **Botões de ação** (visualizar, editar, excluir)
--   **Confirmações** para ações destrutivas
--   **Breadcrumbs** para navegação
+### Validação
 
-## Funcionalidades de Segurança
+```php
+'capa' => 'nullable|image|mimes:jpeg,jpg,png|max:2048'
+```
 
--   **Autenticação obrigatória** para área administrativa
--   **Redirecionamento automático** para login quando não autenticado
--   **Proteção CSRF** em todos os formulários
--   **Validação de dados** no backend
--   **Proteção contra exclusão** de autores com livros associados
+## ⚙️ Sistema de Scheduler
 
-## Como Usar o Sistema
+### Comando de Limpeza de Logs
 
-### 1. Acessar o Sistema
+```bash
+php artisan logs:clean-old [--days=30]
+```
 
-1. Acesse: `http://127.0.0.1:8000`
-2. Navegue pelas páginas públicas ou faça login
+### Agendamento Automático
 
-### 2. Fazer Login
+- **Frequência:** Diariamente às 00:00
+- **Logs de execução:** storage/logs/scheduler.log
+- **Configuração:** bootstrap/app.php
+
+## 🎯 Como Usar o Sistema
+
+### 1. Acessar como Visitante
+
+1. Acesse: `http://localhost:8000`
+2. Navegue pela página inicial sem login
+
+### 2. Fazer Login Administrativo
 
 1. Clique em "Login" na navbar
-2. Use as credenciais de teste:
-    - Email: `admin@test.com`
-    - Senha: `password`
+2. Use as credenciais: `admin@test.com` / `password`
+3. Será redirecionado para área administrativa
 
 ### 3. Gerenciar Livros
 
-1. Após login, acesse "Livros" no menu
-2. Use os botões para criar, editar ou excluir livros
-3. Todos os livros devem ter um autor associado
+1. Acesse "Livros" no menu principal
+2. Use botões para **Criar**, **Editar** ou **Excluir**
+3. **Upload de capas:** Drag & drop ou seleção de arquivo
+4. **Visualização:** Capa aparece redimensionada automaticamente
 
 ### 4. Gerenciar Autores
 
-1. Acesse "Autores" no menu
-2. Crie novos autores informando nome e estado (sigla)
-3. Visualize os livros de cada autor
-4. **Nota:** Autores com livros não podem ser excluídos
+1. Acesse "Autores" no menu principal
+2. Crie novos autores com nome e estado
+3. Visualize livros associados a cada autor
+4. **Restrição:** Autores com livros não podem ser excluídos
 
-### 5. Navegar como Visitante
+---
 
-1. Acesse `/books/public` para ver o catálogo
-2. Acesse `/authors/public` para ver autores
-3. Nenhuma autenticação necessária
-
-## Dados Pré-cadastrados
-
-### Autores (10 autores brasileiros)
-
--   Machado de Assis (RJ)
--   Clarice Lispector (PE)
--   Guimarães Rosa (MG)
--   Jorge Amado (BA)
--   Cecília Meireles (RJ)
--   E mais 5 autores...
-
-### Livros (6 clássicos brasileiros)
-
--   Dom Casmurro - Machado de Assis
--   A Hora da Estrela - Clarice Lispector
--   Grande Sertão: Veredas - Guimarães Rosa
--   Gabriela, Cravo e Canela - Jorge Amado
--   Viagem - Cecília Meireles
--   O Cortiço - Aluísio Azevedo
-
-## Tecnologias Utilizadas
-
--   **Backend:** Laravel 10
--   **Frontend:** Blade Templates + Bootstrap 5
--   **Banco de Dados:** MySQL/MariaDB
--   **Autenticação:** Laravel Auth (web sessions)
--   **Icons:** Bootstrap Icons
--   **Styling:** Bootstrap 5 + CSS customizado
-
-## Status do Projeto
-
-✅ **CONCLUÍDO** - Sistema totalmente funcional com:
-
--   CRUD completo implementado
--   Autenticação web funcionando
--   Interface responsiva e moderna
--   Dados de teste carregados
--   Validações e proteções implementadas
--   Documentação completa
-
-## Próximos Passos (Opcionais)
-
--   Implementar upload de imagens para livros
--   Adicionar busca e filtros avançados
--   Implementar paginação para listas grandes
--   Adicionar sistema de categorias/gêneros
--   Implementar dashboard com estatísticas
--   Adicionar funcionalidade de favoritos
+**Desenvolvido por Lucas Rodrigues**

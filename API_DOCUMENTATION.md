@@ -1,12 +1,14 @@
-# API de Gestão de Autores - Documentação
+# 📡 API REST - Sistema de Gestão de Livros
 
-## Autenticação
+API para gestão de autores com autenticação Laravel Sanctum.
 
-A API utiliza Laravel Sanctum para autenticação baseada em tokens. Todas as rotas protegidas requerem um token Bearer válido.
+## 🔐 Autenticação
 
-### Endpoints de Autenticação
+A API utiliza **Laravel Sanctum** para autenticação baseada em tokens Bearer. Todas as rotas protegidas requerem um token válido no header `Authorization`.
 
-#### 1. Registro de Usuário
+## 🚀 Endpoints de Autenticação
+
+### Registro de Usuário
 
 ```http
 POST /api/auth/register
@@ -20,7 +22,7 @@ Content-Type: application/json
 }
 ```
 
-#### 2. Login
+### Login
 
 ```http
 POST /api/auth/login
@@ -28,7 +30,7 @@ Content-Type: application/json
 
 {
     "email": "admin@test.com",
-    "password": "password123"
+    "password": "password"
 }
 ```
 
@@ -36,33 +38,37 @@ Content-Type: application/json
 
 ```json
 {
-    "success": true,
-    "message": "Login realizado com sucesso",
-    "data": {
-        "user": {...},
-        "token": "1|token_aqui",
-        "token_type": "Bearer"
-    }
+  "success": true,
+  "message": "Login realizado com sucesso",
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@test.com"
+    },
+    "token": "1|AbCdEf123456...",
+    "token_type": "Bearer"
+  }
 }
 ```
 
-#### 3. Logout
+### Logout
 
 ```http
 POST /api/auth/logout
 Authorization: Bearer {token}
 ```
 
-#### 4. Informações do Usuário
+### Informações do Usuário
 
 ```http
 GET /api/auth/user
 Authorization: Bearer {token}
 ```
 
-## Endpoints de Autores
+## 👥 Endpoints de Autores
 
-Todas as rotas de autores requerem autenticação.
+> **⚠️ Todas as rotas de autores requerem autenticação**
 
 ### 1. Listar Autores
 
@@ -72,7 +78,7 @@ Authorization: Bearer {token}
 
 # Parâmetros opcionais:
 # ?estado=1 (filtrar por estado ativo/inativo)
-# ?per_page=10 (número de itens por página)
+# ?per_page=15 (itens por página)
 ```
 
 ### 2. Criar Autor
@@ -115,7 +121,7 @@ DELETE /api/authors/{id}
 Authorization: Bearer {token}
 ```
 
-**Nota:** Não é possível excluir autores que possuem livros associados.
+> **🛡️ Proteção:** Não é possível excluir autores que possuem livros associados (retorna erro 409).
 
 ### 6. Obter Livros de um Autor
 
@@ -130,51 +136,44 @@ Authorization: Bearer {token}
 {
     "success": true,
     "data": {
-        "author": {...},
+        "author": {
+            "id": 1,
+            "nome": "Machado de Assis",
+            "estado": true
+        },
         "books": {
-            "data": [...],
+            "data": [
+                {
+                    "id": 1,
+                    "titulo": "Dom Casmurro",
+                    "descricao": "Romance clássico...",
+                    "data_publicacao": "1899-01-01",
+                    "capa": "capas/exemplo.jpg"
+                }
+            ],
             "pagination": {...}
         }
     }
 }
 ```
 
-## Códigos de Status HTTP
+## 📊 Códigos de Status HTTP
 
--   `200` - Sucesso
--   `201` - Criado com sucesso
--   `401` - Não autenticado
--   `404` - Recurso não encontrado
--   `409` - Conflito (ex: tentar excluir autor com livros)
--   `422` - Erro de validação
+| Código | Descrição                                      |
+| ------ | ---------------------------------------------- |
+| `200`  | Sucesso                                        |
+| `201`  | Criado com sucesso                             |
+| `401`  | Não autenticado                                |
+| `403`  | Sem permissão                                  |
+| `404`  | Recurso não encontrado                         |
+| `409`  | Conflito (ex: tentar excluir autor com livros) |
+| `422`  | Erro de validação                              |
 
-## Usuários de Teste
+## 👤 Usuários de Teste
 
--   **Admin:** admin@test.com / password123
--   **Usuário:** user@test.com / password123
+- **Administrador:** admin@test.com / password
+- **Usuário:** user@test.com / password
 
-## Exemplos de Uso com cURL
+---
 
-### Login e obtenção de token:
-
-```bash
-curl -X POST http://127.0.0.1:8001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "admin@test.com", "password": "password123"}'
-```
-
-### Listar autores:
-
-```bash
-curl -X GET http://127.0.0.1:8001/api/authors \
-  -H "Authorization: Bearer {seu_token}"
-```
-
-### Criar autor:
-
-```bash
-curl -X POST http://127.0.0.1:8001/api/authors \
-  -H "Authorization: Bearer {seu_token}" \
-  -H "Content-Type: application/json" \
-  -d '{"nome": "Novo Autor", "estado": true}'
-```
+**Desenvolvido por Lucas Rodrigues**
