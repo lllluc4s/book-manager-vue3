@@ -61,19 +61,19 @@
 
                     <div class="mb-3">
                         <label for="capa" class="form-label">Capa do Livro</label>
-                        @if($book->capa)
-                            <div class="mb-2">
-                                <div class="d-flex align-items-start gap-3">
-                                    <img src="{{ asset('storage/' . $book->capa) }}" alt="Capa atual" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                    <div>
-                                        <small class="text-muted d-block mb-2">Capa atual</small>
+                        <div class="mb-2">
+                            <div class="d-flex align-items-start gap-3">
+                                <img src="{{ $book->capa ? asset('storage/' . $book->capa) : asset('images/default-book-cover.svg') }}" alt="Capa atual" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                <div>
+                                    <small class="text-muted d-block mb-2">{{ $book->capa ? 'Capa atual' : 'Capa padrão (nenhuma capa enviada)' }}</small>
+                                    @if($book->capa)
                                         <button type="button" class="btn btn-outline-danger btn-sm" onclick="removerCapa()">
                                             <i class="bi bi-trash"></i> Remover Capa
                                         </button>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
-                        @endif
+                        </div>
                         <input type="file" class="form-control @error('capa') is-invalid @enderror" 
                                id="capa" name="capa" accept="image/jpeg,image/jpg,image/png">
                         <div class="form-text">

@@ -13,46 +13,48 @@
 </div>
 
 @if($books->count() > 0)
-    <div class="row">
+    <div class="row row-uniform-height">
         @foreach($books as $book)
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    @if($book->capa)
-                        <div class="text-center pt-3">
-                            <img src="{{ asset('storage/' . $book->capa) }}" 
-                                 alt="Capa de {{ $book->titulo }}" 
-                                 class="rounded"
-                                 style="width: 120px; height: 120px; object-fit: cover;">
-                        </div>
-                    @endif
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $book->titulo }}</h5>
-                        <p class="card-text text-muted mb-2">
-                            <i class="bi bi-person"></i> {{ $book->author->nome }}
-                        </p>
-                        <p class="card-text text-muted mb-2">
-                            <i class="bi bi-calendar"></i> {{ $book->data_publicacao->format('d/m/Y') }}
-                        </p>
-                        <p class="card-text">{{ Str::limit($book->descricao, 100) }}</p>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 book-card card-uniform-height">
+                    <div class="text-center pt-3">
+                        <img src="{{ $book->capa ? asset('storage/' . $book->capa) : asset('images/default-book-cover.svg') }}" 
+                             alt="Capa de {{ $book->titulo }}" 
+                             class="rounded"
+                             style="width: 120px; height: 120px; object-fit: cover;">
                     </div>
-                    <div class="card-footer bg-transparent">
-                        <div class="btn-group w-100" role="group">
-                            <a href="{{ route('books.show', $book) }}" class="btn btn-custom-outline btn-sm">
-                                <i class="bi bi-eye"></i> Ver
-                            </a>
-                            @if(auth()->user()->canManage())
-                                <a href="{{ route('books.edit', $book) }}" class="btn btn-custom-outline btn-sm">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </a>
-                                <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
-                                      onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> Excluir
-                                    </button>
-                                </form>
-                            @endif
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h5 class="card-title">{{ $book->titulo }}</h5>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="bi bi-person"></i> {{ $book->author->nome }}
+                                </p>
+                                <p class="card-text text-muted mb-2">
+                                    <i class="bi bi-calendar"></i> {{ $book->data_publicacao->format('d/m/Y') }}
+                                </p>
+                                <p class="card-text">{{ Str::limit($book->descricao, 100) }}</p>
+                            </div>
+                            <div class="book-actions-sidebar">
+                                <div class="btn-action-vertical">
+                                    <a href="{{ route('books.show', $book) }}" class="btn btn-action btn-view" title="Ver detalhes">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    @if(auth()->user()->canManage())
+                                        <a href="{{ route('books.edit', $book) }}" class="btn btn-action btn-edit" title="Editar livro">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
+                                              onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-action btn-delete" title="Excluir livro">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,8 +63,8 @@
     </div>
 
     <!-- Paginação -->
-    <div class="d-flex justify-content-center">
-        {{ $books->links() }}
+    <div class="pagination-wrapper">
+        {{ $books->links('pagination::custom') }}
     </div>
 @else
     <div class="text-center py-5">

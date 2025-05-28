@@ -10,35 +10,32 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0"><i class="bi bi-book"></i> {{ $book->titulo }}</h4>
                     @if(auth()->user()->canManage())
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('books.edit', $book) }}" class="btn btn-edit-outline btn-sm">
-                                <i class="bi bi-pencil"></i> Editar
+                        <div class="btn-action-group">
+                            <a href="{{ route('books.edit', $book) }}" class="btn btn-action-vertical btn-edit" title="Editar livro">
+                                <i class="bi bi-pencil"></i>
                             </a>
                             <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
                                   onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                    <i class="bi bi-trash"></i> Excluir
+                                <button type="submit" class="btn btn-action-vertical btn-delete" title="Excluir livro">
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </form>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
-                    @if($book->capa)
-                        <div class="col-md-3 mb-3">
-                            <h6 class="text-muted">Capa</h6>
-                            <img src="{{ asset('storage/' . $book->capa) }}" 
-                                 alt="Capa de {{ $book->titulo }}" 
-                                 class="img-fluid rounded shadow-sm"
-                                 style="max-width: 200px; max-height: 200px; object-fit: cover;">
-                        </div>
-                        <div class="col-md-9">
-                    @else
-                        <div class="col-md-12">
+                    <div class="col-md-3 mb-3">
+                        <h6 class="text-muted">Capa</h6>
+                        <img src="{{ $book->capa ? asset('storage/' . $book->capa) : asset('images/default-book-cover.svg') }}" 
+                             alt="Capa de {{ $book->titulo }}" 
+                             class="img-fluid rounded shadow-sm"
+                             style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-9">
                     @endif
                         <div class="row">
                             <div class="col-md-6">

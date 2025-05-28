@@ -40,19 +40,19 @@
                                     <span class="badge bg-info">{{ $author->books_count ?? 0 }}</span>
                                 </td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('authors.show', $author) }}" class="btn btn-custom-outline btn-sm">
+                                    <div class="btn-action-group">
+                                        <a href="{{ route('authors.show', $author) }}" class="btn btn-action-vertical btn-view" title="Ver detalhes">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                         @if(auth()->user()->canManage())
-                                            <a href="{{ route('authors.edit', $author) }}" class="btn btn-custom-outline btn-sm">
+                                            <a href="{{ route('authors.edit', $author) }}" class="btn btn-action-vertical btn-edit" title="Editar autor">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <form action="{{ route('authors.destroy', $author) }}" method="POST" class="d-inline" 
                                                   onsubmit="return confirm('Tem certeza que deseja excluir este autor? Esta ação não pode ser desfeita. ATENÇÃO: Não será possível excluir se houver livros associados.')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <button type="submit" class="btn btn-action-vertical btn-delete" title="Excluir autor">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -68,8 +68,8 @@
     </div>
 
     <!-- Paginação -->
-    <div class="d-flex justify-content-center mt-3">
-        {{ $authors->links() }}
+    <div class="pagination-wrapper">
+        {{ $authors->links('pagination::custom') }}
     </div>
 @else
     <div class="text-center py-5">

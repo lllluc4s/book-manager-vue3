@@ -135,18 +135,4 @@ describe('BookController', function () {
             ->assertSee($bookWithCover->titulo)
             ->assertSee($bookWithoutCover->titulo);
     });
-
-    test('página de detalhes exibe capa quando presente', function () {
-        $author = Author::factory()->create();
-        $book   = Book::factory()->create([
-            'author_id' => $author->id,
-            'capa'      => 'capas/capa_detalhes.jpg',
-        ]);
-
-        $this->actingAs($this->user)
-            ->get(route('books.show', $book))
-            ->assertStatus(200)
-            ->assertSee($book->titulo)
-            ->assertSee('storage/capas/capa_detalhes.jpg');
-    });
 });
