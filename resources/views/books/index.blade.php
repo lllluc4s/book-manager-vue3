@@ -23,37 +23,35 @@
                              class="rounded"
                              style="width: 120px; height: 120px; object-fit: cover;">
                     </div>
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <h5 class="card-title">{{ $book->titulo }}</h5>
-                                <p class="card-text text-muted mb-2">
-                                    <i class="bi bi-person"></i> {{ $book->author->nome }}
-                                </p>
-                                <p class="card-text text-muted mb-2">
-                                    <i class="bi bi-calendar"></i> {{ $book->data_publicacao->format('d/m/Y') }}
-                                </p>
-                                <p class="card-text">{{ Str::limit($book->descricao, 100) }}</p>
-                            </div>
-                            <div class="book-actions-sidebar">
-                                <div class="btn-action-vertical">
-                                    <a href="{{ route('books.show', $book) }}" class="btn btn-action btn-view" title="Ver detalhes">
-                                        <i class="bi bi-eye"></i>
+                    <div class="card-body d-flex flex-column">
+                        <div class="card-content flex-grow-1">
+                            <h5 class="card-title">{{ $book->titulo }}</h5>
+                            <p class="card-text text-muted mb-2">
+                                <i class="bi bi-person"></i> {{ $book->author->nome }}
+                            </p>
+                            <p class="card-text text-muted mb-2">
+                                <i class="bi bi-calendar"></i> {{ $book->data_publicacao->format('d/m/Y') }}
+                            </p>
+                            <p class="card-text">{{ Str::limit($book->descricao, 100) }}</p>
+                        </div>
+                        <div class="book-actions-centered mt-3">
+                            <div class="btn-action-horizontal d-flex justify-content-center gap-2">
+                                <a href="{{ route('books.show', $book) }}" class="btn btn-action btn-view" title="Ver detalhes">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                @if(auth()->user()->canManage())
+                                    <a href="{{ route('books.edit', $book) }}" class="btn btn-action btn-edit" title="Editar livro">
+                                        <i class="bi bi-pencil"></i>
                                     </a>
-                                    @if(auth()->user()->canManage())
-                                        <a href="{{ route('books.edit', $book) }}" class="btn btn-action btn-edit" title="Editar livro">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
-                                              onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-action btn-delete" title="Excluir livro">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
+                                    <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" 
+                                          onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-action btn-delete" title="Excluir livro">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
