@@ -69,7 +69,7 @@ class CleanOldLogs extends Command
                 'cutoff_date'     => $cutoffDate->toDateTimeString(),
                 'records_removed' => $recordsRemoved,
                 'memory_used'     => memory_get_peak_usage(true),
-                'execution_time'  => microtime(true) - LARAVEL_START,
+                'execution_time'  => defined('LARAVEL_START') ? microtime(true) - LARAVEL_START : 0,
             ]);
 
             return self::SUCCESS;
