@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use App\Models\Log;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Carbon\Carbon;
 
 class LogFactory extends Factory
 {

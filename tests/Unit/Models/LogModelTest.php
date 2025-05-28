@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Models;
 
+use Carbon\Carbon;
 use App\Models\Log;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Carbon\Carbon;
 
 class LogModelTest extends TestCase
 {
