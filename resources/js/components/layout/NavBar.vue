@@ -10,7 +10,7 @@
       </button>
       
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav me-auto">
           <li v-if="isAuthenticated" class="nav-item">
             <router-link class="nav-link" :class="$route.name?.startsWith('books') ? 'active' : ''" to="/books">
               <i class="bi bi-book"></i> Livros
