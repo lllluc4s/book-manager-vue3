@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import authService from '../../services/auth.service';
+
 export default {
   name: 'NavBar',
   data() {
@@ -58,7 +60,7 @@ export default {
   },
   computed: {
     isAuthenticated() {
-      return !!localStorage.getItem('auth_token');
+      return authService.isAuthenticated();
     }
   },
   async mounted() {
@@ -69,24 +71,39 @@ export default {
   methods: {
     async fetchUser() {
       try {
+        // Verificar primeiro se está autenticado
+        if (!this.isAuthenticated) {
+          console.log('Não há token de autenticação');
+          return;
+        }
+
+        // Obter usuário do localStorage para exibição imediata
+        const storedUser = authService.getUser();
+        if (storedUser) {
+          this.user = storedUser;
+        }
+        
+        // Validar com a API
         const response = await this.$axios.get('/auth/user');
-        this.user = response.data;
+        if (response.data.success) {
+          this.user = response.data.data;
+          // Atualizar no serviço
+          authService.setUser(this.user);
+        } else {
+          throw new Error('Resposta inválida da API');
+        }
       } catch (error) {
         console.error('Erro ao buscar usuário:', error);
-        // Se der erro, provavelmente o token é inválido
-        this.logout();
+        // Se houver erro de autenticação, fazer logout
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          await this.logout();
+        }
       }
     },
     async logout() {
-      try {
-        await this.$axios.post('/auth/logout');
-      } catch (error) {
-        console.error('Erro no logout:', error);
-      } finally {
-        localStorage.removeItem('auth_token');
-        this.user = null;
-        this.$router.push('/');
-      }
+      await authService.logout();
+      this.user = null;
+      this.$router.push('/');
     }
   },
   watch: {

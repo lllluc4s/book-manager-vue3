@@ -27,13 +27,30 @@ axios.interceptors.request.use(config => {
     }
 
     // Incluir token de autenticação se existir
-    const authToken = localStorage.getItem('auth_token');
+    const authToken = authService.getToken();
     if (authToken) {
         config.headers['Authorization'] = `Bearer ${authToken}`;
     }
 
     return config;
 });
+
+// Interceptador para lidar com erros de autenticação
+axios.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+            // Token inválido ou expirado - fazer logout
+            authService.clearAuthData();
+
+            // Apenas redirecionar se não estiver já na página de login
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 
 // Configurar rotas
 const routes = [
@@ -54,13 +71,18 @@ const router = createRouter({
     routes
 });
 
+// Importar serviço de autenticação
+import authService from './services/auth.service';
+
 // Guard de autenticação
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('auth_token');
+    const isAuthenticated = authService.isAuthenticated();
 
-    if (to.meta.requiresAuth && !token) {
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        // Redirecionar para login se tentar acessar rota protegida sem estar autenticado
         next('/login');
-    } else if (to.name === 'login' && token) {
+    } else if (to.name === 'login' && isAuthenticated) {
+        // Redirecionar para a lista de livros se já estiver autenticado
         next('/books');
     } else {
         next();

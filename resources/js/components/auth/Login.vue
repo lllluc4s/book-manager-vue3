@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import authService from '../../services/auth.service';
+
 export default {
   name: 'Login',
   data() {
@@ -98,25 +100,26 @@ export default {
       this.errors = {};
       
       try {
-        const response = await this.$axios.post('/auth/login', this.form);
+        // Usar o serviço de autenticação
+        const result = await authService.login(this.form);
         
-        // Salvar token no localStorage
-        localStorage.setItem('auth_token', response.data.token);
-        
-        // Emitir mensagem de sucesso
-        this.$emit('success', 'Login realizado com sucesso!');
-        
-        // Redirecionar para a lista de livros
-        this.$router.push('/books');
-        
+        if (result.success) {
+          // Emitir mensagem de sucesso
+          this.$emit('success', 'Login realizado com sucesso!');
+          
+          // Redirecionar para a lista de livros
+          this.$router.push('/books');
+        } else {
+          // Mostrar mensagem de erro
+          this.$emit('error', result.message);
+        }
       } catch (error) {
+        console.error('Erro no login:', error);
         if (error.response?.status === 422) {
           // Erros de validação
           this.errors = error.response.data.errors || {};
-        } else if (error.response?.status === 401) {
-          this.$emit('error', 'Credenciais inválidas. Verifique seu e-mail e senha.');
         } else {
-          this.$emit('error', 'Erro no servidor. Tente novamente.');
+          this.$emit('error', 'Erro ao tentar fazer login. Tente novamente.');
         }
       } finally {
         this.loading = false;
