@@ -28,10 +28,26 @@ export default {
   data() {
     return {
       successMessage: '',
-      errorMessage: ''
+      errorMessage: '',
+      authListenerSetup: false
     };
   },
+  created() {
+    // Configurar ouvinte para eventos de autenticação
+    window.addEventListener('auth-state-changed', this.handleAuthStateChanged);
+  },
+  
+  beforeUnmount() {
+    // Remover o ouvinte quando o componente for desmontado
+    window.removeEventListener('auth-state-changed', this.handleAuthStateChanged);
+  },
+  
   methods: {
+    handleAuthStateChanged(event) {
+      // Forçar a atualização do componente NavBar quando o estado de autenticação mudar
+      this.$forceUpdate();
+    },
+    
     showSuccessMessage(message) {
       this.successMessage = message;
       setTimeout(() => {

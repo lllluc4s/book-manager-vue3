@@ -56,12 +56,13 @@ export default {
   data() {
     return {
       user: null,
-      showDropdown: false
+      showDropdown: false,
+      authState: !!authService.getToken() // Propriedade reativa para controle do estado de autenticação
     };
   },
   computed: {
     isAuthenticated() {
-      return authService.isAuthenticated();
+      return this.authState;
     }
   },
   async mounted() {
@@ -71,11 +72,15 @@ export default {
     
     // Adicionar evento de clique global para fechar o dropdown
     document.addEventListener('click', this.closeDropdownOnClickOutside);
+    
+    // Ouvir eventos de alteração de autenticação
+    window.addEventListener('auth-state-changed', this.handleAuthStateChanged);
   },
   
   beforeUnmount() {
-    // Remover evento global ao desmontar o componente
+    // Remover eventos globais ao desmontar o componente
     document.removeEventListener('click', this.closeDropdownOnClickOutside);
+    window.removeEventListener('auth-state-changed', this.handleAuthStateChanged);
   },
   methods: {
     toggleDropdown(event) {
@@ -98,10 +103,14 @@ export default {
     async fetchUser() {
       try {
         // Verificar primeiro se está autenticado
-        if (!this.isAuthenticated) {
+        if (!authService.isAuthenticated()) {
           console.log('Não há token de autenticação');
+          this.authState = false;
           return;
         }
+
+        // Atualizar estado de autenticação
+        this.authState = true;
 
         // Obter usuário do localStorage para exibição imediata
         const storedUser = authService.getUser();
@@ -146,6 +155,26 @@ export default {
         window.dispatchEvent(new CustomEvent('show-message', {
           detail: { type: 'error', message: 'Erro ao fazer logout. Por favor, tente novamente.' }
         }));
+      }
+    },
+    
+    // Método para lidar com alterações no estado de autenticação
+    async handleAuthStateChanged(event) {
+      const { authenticated, user } = event.detail;
+      
+      // Atualizar o estado de autenticação
+      this.authState = authenticated;
+      
+      if (authenticated) {
+        // Se autenticado, definir o usuário ou buscar da API
+        if (user) {
+          this.user = user;
+        } else {
+          await this.fetchUser();
+        }
+      } else {
+        // Se não autenticado, limpar usuário
+        this.user = null;
       }
     }
   },

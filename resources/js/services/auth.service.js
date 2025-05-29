@@ -11,6 +11,15 @@ class AuthService {
                 // Armazenar token e informações do usuário
                 this.setToken(response.data.data.token);
                 this.setUser(response.data.data.user);
+
+                // Disparar evento global de login bem-sucedido
+                window.dispatchEvent(new CustomEvent('auth-state-changed', {
+                    detail: {
+                        authenticated: true,
+                        user: response.data.data.user
+                    }
+                }));
+
                 return {
                     success: true,
                     user: response.data.data.user
@@ -42,6 +51,14 @@ class AuthService {
         } finally {
             // Sempre limpar dados locais
             this.clearAuthData();
+
+            // Disparar evento global de logout
+            window.dispatchEvent(new CustomEvent('auth-state-changed', {
+                detail: {
+                    authenticated: false,
+                    user: null
+                }
+            }));
         }
     }
 

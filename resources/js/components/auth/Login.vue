@@ -107,6 +107,9 @@ export default {
           // Emitir mensagem de sucesso
           this.$emit('success', 'Login realizado com sucesso!');
           
+          // Uma breve pausa para permitir que os eventos sejam processados
+          await this.$nextTick();
+          
           // Redirecionar para a lista de livros
           this.$router.push('/books');
         } else {
