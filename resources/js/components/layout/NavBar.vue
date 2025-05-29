@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
       <router-link class="navbar-brand" :to="isAuthenticated ? '/books' : '/'">
         <i class="bi bi-book"></i> Gestão de Livros

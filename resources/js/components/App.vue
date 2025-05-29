@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <NavBar v-if="$route.name !== 'welcome'" />
-    <div :class="$route.name !== 'welcome' ? 'container mt-4 mb-5' : ''">
+    <div :class="$route.name !== 'welcome' ? 'container mt-5 mb-5 pt-3' : ''">
       <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
         {{ successMessage }}
         <button type="button" class="btn-close" @click="clearSuccessMessage"></button>
