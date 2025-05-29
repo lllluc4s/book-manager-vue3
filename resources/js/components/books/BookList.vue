@@ -23,7 +23,7 @@
           <div class="card h-100 book-card card-uniform-height">
             <div class="text-center pt-3">
               <img 
-                :src="book.capa ? `/storage/${book.capa}` : '/images/default-book-cover.svg'"
+                :src="getImageUrl(book.capa)"
                 :alt="`Capa de ${book.titulo}`"
                 class="rounded"
                 style="width: 120px; height: 120px; object-fit: cover;"
@@ -144,6 +144,11 @@ export default {
     const loading = ref(true)
     const bookToDelete = ref(null)
     
+    const getImageUrl = (path) => {
+      if (!path) return '/images/default-book-cover.svg'
+      return `/storage/${path}`
+    }
+    
     const canManage = computed(() => {
       const user = authService.getUser()
       return user?.role === 'admin'
@@ -244,7 +249,8 @@ export default {
       confirmDelete,
       deleteBook,
       formatDate,
-      truncateText
+      truncateText,
+      getImageUrl
     }
   }
 };

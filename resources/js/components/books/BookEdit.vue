@@ -82,7 +82,7 @@
               <div class="mb-2" v-if="book.capa">
                 <div class="d-flex align-items-start gap-3">
                   <img 
-                    :src="book.capa ? `/storage/${book.capa}` : '/images/default-book-cover.svg'" 
+                    :src="getImageUrl(book.capa)" 
                     alt="Capa atual" 
                     class="img-thumbnail" 
                     style="width: 100px; height: 100px; object-fit: cover;"
@@ -219,6 +219,11 @@ export default {
     const errors = ref({})
     const showRemoveCoverModal = ref(false)
     const removingCover = ref(false)
+    
+    const getImageUrl = (path) => {
+      if (!path) return '/images/default-book-cover.svg'
+      return `/storage/${path}`
+    }
 
     const form = reactive({
       titulo: '',
@@ -354,7 +359,8 @@ export default {
       removingCover,
       handleFileUpload,
       submitForm,
-      removeCover
+      removeCover,
+      getImageUrl
     }
   }
 }

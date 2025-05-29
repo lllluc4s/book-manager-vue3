@@ -30,7 +30,7 @@
             <div class="col-md-3 mb-3">
               <h6 class="text-muted">Capa</h6>
               <img 
-                :src="book.capa ? `/storage/${book.capa}` : '/images/default-book-cover.svg'" 
+                :src="getImageUrl(book.capa)" 
                 :alt="`Capa de ${book.titulo}`" 
                 class="img-fluid rounded shadow-sm"
                 style="max-width: 200px; max-height: 200px; object-fit: cover;"
@@ -108,6 +108,11 @@ export default {
     const router = useRouter()
     const book = ref(null)
     const loading = ref(true)
+    
+    const getImageUrl = (path) => {
+      if (!path) return '/images/default-book-cover.svg'
+      return `/storage/${path}`
+    }
 
     const canManage = computed(() => {
       const user = JSON.parse(localStorage.getItem('user') || '{}')
@@ -174,7 +179,8 @@ export default {
       canManage,
       deleteBook,
       formatDate,
-      formatDescription
+      formatDescription,
+      getImageUrl
     }
   }
 }
