@@ -60,14 +60,19 @@ body {
 /* Button customization */
 .btn-custom-primary {
   background-color: var(--primary-color);
-  border-color: var(--primary-color);
   color: var(--background-color);
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .btn-custom-primary:hover {
-  background-color: var(--primary-hover);
-  border-color: var(--primary-hover);
-  color: var(--background-color);
+  background-color: #555;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-custom-outline {
@@ -115,4 +120,29 @@ body {
   background-color: var(--primary-color);
   color: var(--background-color);
   border-top: 1px solid var(--border-color);
+}
+
+/* Estilos para paginação - padronizados */
+.pagination-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hover effect para links de paginação */
+.pagination .page-link {
+  color: var(--primary-color);
+  border-color: var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: var(--light-gray);
+  border-color: var(--border-color);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }

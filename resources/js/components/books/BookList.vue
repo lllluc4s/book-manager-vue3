@@ -5,7 +5,7 @@
       <router-link 
         v-if="canManage" 
         :to="{ name: 'books.create' }" 
-        class="btn btn-custom-primary btn-lg"
+        class="btn btn-custom-primary"
       >
         <i class="bi bi-plus-circle"></i> Adicionar Livro
       </router-link>
@@ -74,8 +74,8 @@
 
       <!-- Paginação -->
       <div class="pagination-wrapper" v-if="pagination.total > pagination.per_page">
-        <nav>
-          <ul class="pagination">
+        <nav aria-label="Navegação de páginas">
+          <ul class="pagination justify-content-center">
             <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
               <button class="page-link" @click="changePage(pagination.current_page - 1)">Anterior</button>
             </li>
@@ -104,7 +104,7 @@
       <router-link 
         v-if="canManage" 
         :to="{ name: 'books.create' }" 
-        class="btn btn-custom-primary btn-lg"
+        class="btn btn-custom-primary"
       >
         <i class="bi bi-plus-circle"></i> Adicionar Livro
       </router-link>

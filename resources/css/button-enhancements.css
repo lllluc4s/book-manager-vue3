@@ -26,3 +26,31 @@
   font-size: 1.1rem;
   vertical-align: -0.125em;
 }
+
+/* Estilos para paginação centralizada */
+.pagination-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hover effect para links de paginação */
+.pagination .page-link {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  border-color: var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: var(--light-gray);
+  border-color: var(--border-color);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #555; /* Um tom mais claro que --primary-color (#333) */
+  border-color: #555;
+  color: var(--background-color);
+  font-weight: 500;
+}
