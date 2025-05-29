@@ -167,3 +167,30 @@ body {
 .navbar-nav .dropdown-item i {
   margin-inline-end: 0.5rem;
 }
+
+/* Estilos para aumentar o título do site e dar efeito de hover nos botões da navbar */
+
+/* Título do site com tamanho maior */
+.navbar-brand {
+  font-size: 1.8rem !important; /* Aumentado para dar mais destaque */
+  font-weight: 700 !important; /* Aumentado o peso da fonte para dar mais destaque */
+  transition: all 0.3s ease;
+}
+
+/* Efeito de hover para links de navegação */
+.navbar-nav .nav-link {
+  transition: all 0.3s ease !important;
+}
+
+.navbar-nav .nav-link:hover {
+  transform: scale(1.08) !important;
+}
+
+/* Efeito de hover para o dropdown do usuário */
+.user-dropdown-toggle {
+  transition: all 0.3s ease !important;
+}
+
+.user-dropdown-toggle:hover {
+  transform: scale(1.08) !important;
+}
