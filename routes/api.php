@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AuthorApiController;
+use App\Http\Controllers\Api\BookApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,4 +39,14 @@ Route::middleware('auth:sanctum')->group(function () {
         'destroy' => 'api.authors.destroy',
     ]);
     Route::get('authors/{id}/books', [AuthorApiController::class, 'books'])->name('api.authors.books');
+
+    // API de Livros (protegida)
+    Route::apiResource('books', BookApiController::class)->names([
+        'index'   => 'api.books.index',
+        'store'   => 'api.books.store',
+        'show'    => 'api.books.show',
+        'update'  => 'api.books.update',
+        'destroy' => 'api.books.destroy',
+    ]);
+    Route::delete('books/{id}/capa', [BookApiController::class, 'removeCapa'])->name('api.books.remove-capa');
 });

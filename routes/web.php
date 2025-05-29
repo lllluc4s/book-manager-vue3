@@ -6,20 +6,25 @@ use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Rota inicial - página de boas-vindas para não logados
+// Rota inicial - servir Vue SPA para todas as rotas
 Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('books.index');
-    }
-
-    return view('welcome');
+    return view('app');
 })->name('home');
 
-// Rotas de autenticação
+// Rotas Vue SPA (todas as rotas do frontend serão capturadas aqui)
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*')->name('spa');
+
+/*
+// Rotas de autenticação Blade desabilitadas - usando API
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+*/
 
+/*
+// Rotas Blade desabilitadas - substituídas por Vue SPA + API
 // Rotas protegidas por autenticação - apenas visualização
 Route::middleware('auth')->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
@@ -49,3 +54,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     Route::get('/authors/{author}', [AuthorController::class, 'show'])->name('authors.show');
 });
+*/

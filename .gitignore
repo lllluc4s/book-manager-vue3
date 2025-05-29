@@ -1,3 +1,84 @@
+# Laravel
+/vendor/
+/node_modules/
+/public/build/
+/public/hot
+/public/storage
+/storage/*.key
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Vue/Node
+dist/
+.cache/
+.parcel-cache/
+.nyc_output/
+.node_repl_history
+*.tgz
+*.tar.gz
+
+# Test files
+test-*.html
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Laravel Mix
+/public/js
+/public/css
+/public/mix-manifest.json
+
+# Hot reload
+/public/hot
+
+# Storage
+/storage/app/public/books/
+/storage/app/public/authors/
+
 .php-cs-fixer.cache
 .php-cs-fixer.dist.php
 
