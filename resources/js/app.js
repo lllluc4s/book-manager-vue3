@@ -1,4 +1,5 @@
 import axios from 'axios';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Importar Bootstrap JS
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 

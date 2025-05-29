@@ -26,12 +26,12 @@
         <!-- Menu do usuário -->
         <ul class="navbar-nav ms-auto">
           <li v-if="isAuthenticated" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="bi bi-person-circle"></i> {{ user?.name }}
+            <a class="nav-link user-dropdown-toggle" href="#" @click.prevent="toggleDropdown">
+              <i class="bi bi-person-circle"></i> {{ user?.name || 'Usuário' }} <i class="bi bi-caret-down-fill"></i>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end" :class="{ 'show': showDropdown }">
               <li>
-                <a class="dropdown-item" href="#" @click="logout">
+                <a class="dropdown-item" href="#" @click.prevent="logout">
                   <i class="bi bi-box-arrow-right"></i> Sair
                 </a>
               </li>
@@ -55,7 +55,8 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      user: null
+      user: null,
+      showDropdown: false
     };
   },
   computed: {
@@ -67,8 +68,33 @@ export default {
     if (this.isAuthenticated) {
       await this.fetchUser();
     }
+    
+    // Adicionar evento de clique global para fechar o dropdown
+    document.addEventListener('click', this.closeDropdownOnClickOutside);
+  },
+  
+  beforeUnmount() {
+    // Remover evento global ao desmontar o componente
+    document.removeEventListener('click', this.closeDropdownOnClickOutside);
   },
   methods: {
+    toggleDropdown(event) {
+      event.stopPropagation();
+      this.showDropdown = !this.showDropdown;
+    },
+    
+    closeDropdownOnClickOutside(event) {
+      const dropdown = document.querySelector('.user-dropdown-toggle');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+      
+      // Se o clique não foi no dropdown ou dentro do menu do dropdown, feche-o
+      if (dropdown && dropdownMenu && 
+          !dropdown.contains(event.target) && 
+          !dropdownMenu.contains(event.target)) {
+        this.showDropdown = false;
+      }
+    },
+    
     async fetchUser() {
       try {
         // Verificar primeiro se está autenticado
@@ -101,9 +127,26 @@ export default {
       }
     },
     async logout() {
-      await authService.logout();
-      this.user = null;
-      this.$router.push('/');
+      try {
+        // Fechar o dropdown
+        this.showDropdown = false;
+        
+        await authService.logout();
+        this.user = null;
+        
+        // Adicionar uma mensagem de sucesso antes de redirecionar
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'success', message: 'Logout realizado com sucesso!' }
+        }));
+        
+        // Redirecionar para a página inicial
+        this.$router.push('/');
+      } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'error', message: 'Erro ao fazer logout. Por favor, tente novamente.' }
+        }));
+      }
     }
   },
   watch: {
@@ -116,3 +159,56 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.user-dropdown-toggle {
+  cursor: pointer;
+}
+
+.user-dropdown-toggle .bi-caret-down-fill {
+  font-size: 0.75em;
+  margin-inline-start: 5px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  transform: translate(-16px, 40px);
+  display: none;
+  min-inline-size: 10rem;
+  padding: 0.5rem 0;
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: start;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+.dropdown-menu.show {
+  display: block;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: block;
+  inline-size: 100%;
+  padding: 0.25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #1e2125;
+  background-color: #e9ecef;
+}
+</style>
