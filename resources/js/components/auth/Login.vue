@@ -1,9 +1,9 @@
 <template>
-  <div class="login-container">
+  <div class="container mt-5">
     <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="card shadow border-0">
+          <div class="card-header bg-primary text-white text-center py-3">
             <h4 class="mb-0">
               <i class="bi bi-person-circle me-2"></i>
               Login
@@ -24,6 +24,7 @@
                   v-model="form.email"
                   required 
                   autofocus
+                  placeholder="Digite seu e-mail"
                 >
                 <div v-if="errors.email" class="invalid-feedback">{{ errors.email[0] }}</div>
               </div>
@@ -40,6 +41,7 @@
                   id="password" 
                   v-model="form.password"
                   required
+                  placeholder="Digite sua senha"
                 >
                 <div v-if="errors.password" class="invalid-feedback">{{ errors.password[0] }}</div>
               </div>
@@ -60,7 +62,7 @@
               </div>
             </form>
             
-            <hr>
+            <hr class="my-4">
             
             <div class="text-center">
               <small class="text-muted">
@@ -123,18 +125,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.login-container {
-  min-height: calc(100vh - 200px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-container .row {
-  width: 100%;
-  max-width: 400px;
-  margin: 0;
-}
-</style>
