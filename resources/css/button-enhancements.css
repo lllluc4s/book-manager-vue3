@@ -1,0 +1,28 @@
+/* Estilo adicional para botão de ação principal */
+.btn-custom-primary.btn-lg {
+  padding: 0.6rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border-radius: 0.4rem;
+  letter-spacing: 0.025em;
+}
+
+.btn-custom-primary.btn-lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  filter: brightness(110%);
+}
+
+.btn-custom-primary.btn-lg:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ícone do botão de adicionar */
+.btn-custom-primary.btn-lg .bi-plus-circle {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  vertical-align: -0.125em;
+}
