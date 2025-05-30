@@ -98,7 +98,7 @@
             <div class="d-flex justify-content-between">
               <router-link 
                 :to="{ name: 'books.index' }" 
-                class="btn btn-custom-outline"
+                class="btn btn-custom-primary"
               >
                 <i class="bi bi-arrow-left"></i> Voltar
               </router-link>

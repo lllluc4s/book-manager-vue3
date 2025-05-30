@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\Author;
@@ -25,10 +26,13 @@ class AuthorSeeder extends Seeder
         ];
 
         foreach ($authors as $name) {
-            Author::create([
-                'nome'   => $name,
-                'estado' => true,
-            ]);
+            // Verifica se o autor já existe antes de criar
+            if (!Author::where('nome', $name)->exists()) {
+                Author::create([
+                    'nome'   => $name,
+                    'estado' => true,
+                ]);
+            }
         }
     }
 }

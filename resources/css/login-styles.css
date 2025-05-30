@@ -1,0 +1,45 @@
+/* Estilos personalizados para a tela de login */
+
+/* Alterar a cor do cabeçalho de login de azul para preto */
+.card .card-header.bg-primary,
+html body .card-header.bg-primary {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* Alterar a cor do botão de login de azul para preto */
+.card-body .btn-primary,
+form .btn-primary,
+button.btn-primary,
+input.btn-primary,
+html body .btn-primary {
+  background-color: #000 !important;
+  border-color: #000 !important;
+  color: #fff !important;
+}
+
+/* Estilo para o hover do botão preto */
+.card-body .btn-primary:hover,
+form .btn-primary:hover,
+button.btn-primary:hover,
+input.btn-primary:hover,
+html body .btn-primary:hover {
+  background-color: #333 !important;
+  border-color: #333 !important;
+}
+
+/* Estilo para o botão pressionado */
+.card-body .btn-primary:active,
+.card-body .btn-primary:focus,
+form .btn-primary:active,
+form .btn-primary:focus,
+button.btn-primary:active,
+button.btn-primary:focus,
+input.btn-primary:active,
+input.btn-primary:focus,
+html body .btn-primary:active,
+html body .btn-primary:focus {
+  background-color: #222 !important;
+  border-color: #222 !important;
+  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.5) !important;
+}
