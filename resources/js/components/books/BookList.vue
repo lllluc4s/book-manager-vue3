@@ -2,8 +2,12 @@
   <div>
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1><i class="bi bi-book"></i> Lista de Livros</h1>
-      <router-link v-if="canManage" to="/books/create" class="btn btn-custom-primary">
-        <i class="bi bi-plus-circle"></i> Novo Livro
+      <router-link 
+        v-if="canManage" 
+        :to="{ name: 'books.create' }" 
+        class="btn btn-custom-primary"
+      >
+        <i class="bi bi-plus-circle"></i> Adicionar Livro
       </router-link>
     </div>
 
@@ -19,7 +23,7 @@
           <div class="card h-100 book-card card-uniform-height">
             <div class="text-center pt-3">
               <img 
-                :src="book.capa ? `/storage/${book.capa}` : '/images/default-book-cover.svg'"
+                :src="getImageUrl(book.capa)"
                 :alt="`Capa de ${book.titulo}`"
                 class="rounded"
                 style="width: 120px; height: 120px; object-fit: cover;"
@@ -39,7 +43,7 @@
               <div class="book-actions-centered mt-3">
                 <div class="btn-action-horizontal d-flex justify-content-center gap-2">
                   <router-link 
-                    :to="`/books/${book.id}`"
+                    :to="{ name: 'books.show', params: { id: book.id } }"
                     class="btn btn-action btn-view" 
                     title="Ver detalhes"
                   >
@@ -47,7 +51,7 @@
                   </router-link>
                   <router-link 
                     v-if="canManage"
-                    :to="`/books/${book.id}/edit`"
+                    :to="{ name: 'books.edit', params: { id: book.id } }"
                     class="btn btn-action btn-edit" 
                     title="Editar livro"
                   >
@@ -70,8 +74,8 @@
 
       <!-- Paginação -->
       <div class="pagination-wrapper" v-if="pagination.total > pagination.per_page">
-        <nav>
-          <ul class="pagination">
+        <nav aria-label="Navegação de páginas">
+          <ul class="pagination justify-content-center">
             <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
               <button class="page-link" @click="changePage(pagination.current_page - 1)">Anterior</button>
             </li>
@@ -97,7 +101,11 @@
       <i class="bi bi-book display-1 text-muted"></i>
       <h3 class="text-muted mt-3">Nenhum livro encontrado</h3>
       <p class="text-muted">Comece adicionando seu primeiro livro!</p>
-      <router-link v-if="canManage" to="/books/create" class="btn btn-primary">
+      <router-link 
+        v-if="canManage" 
+        :to="{ name: 'books.create' }" 
+        class="btn btn-custom-primary"
+      >
         <i class="bi bi-plus-circle"></i> Adicionar Livro
       </router-link>
     </div>
@@ -124,98 +132,125 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { computed, onMounted, ref } from 'vue';
+import authService from '../../services/auth.service';
+
 export default {
   name: 'BookList',
-  data() {
-    return {
-      books: [],
-      pagination: {},
-      loading: true,
-      bookToDelete: null,
-      user: null
-    };
-  },
-  computed: {
-    canManage() {
-      return this.user?.role === 'admin';
-    },
-    paginationPages() {
-      const pages = [];
-      const current = this.pagination.current_page;
-      const total = this.pagination.last_page;
+  setup(props, { emit }) {
+    const books = ref([])
+    const pagination = ref({})
+    const loading = ref(true)
+    const bookToDelete = ref(null)
+    
+    const getImageUrl = (path) => {
+      if (!path) return '/images/default-book-cover.svg'
+      return `/storage/${path}`
+    }
+    
+    const canManage = computed(() => {
+      const user = authService.getUser()
+      return user?.role === 'admin'
+    })
+    
+    const paginationPages = computed(() => {
+      if (!pagination.value.current_page) return []
+      
+      const current = pagination.value.current_page
+      const total = pagination.value.last_page
       
       // Mostrar até 5 páginas
-      let start = Math.max(1, current - 2);
-      let end = Math.min(total, start + 4);
+      let start = Math.max(1, current - 2)
+      let end = Math.min(total, start + 4)
       
       if (end - start < 4) {
-        start = Math.max(1, end - 4);
+        start = Math.max(1, end - 4)
       }
       
+      const pages = []
       for (let i = start; i <= end; i++) {
-        pages.push(i);
+        pages.push(i)
       }
       
-      return pages;
-    }
-  },
-  async mounted() {
-    await this.fetchUser();
-    await this.fetchBooks();
-  },
-  methods: {
-    async fetchUser() {
+      return pages
+    })
+    
+    const fetchBooks = async (page = 1) => {
+      loading.value = true
       try {
-        const response = await this.$axios.get('/auth/user');
-        this.user = response.data;
-      } catch (error) {
-        console.error('Erro ao buscar usuário:', error);
-      }
-    },
-    async fetchBooks(page = 1) {
-      this.loading = true;
-      try {
-        const response = await this.$axios.get(`/books?page=${page}`);
-        this.books = response.data.data;
-        this.pagination = {
+        const response = await axios.get(`/books?page=${page}`)
+        books.value = response.data.data
+        pagination.value = {
           current_page: response.data.current_page,
           last_page: response.data.last_page,
           per_page: response.data.per_page,
           total: response.data.total
-        };
+        }
       } catch (error) {
-        console.error('Erro ao buscar livros:', error);
-        this.$emit('error', 'Erro ao carregar livros.');
+        console.error('Erro ao buscar livros:', error)
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'error', message: 'Erro ao carregar livros.' }
+        }))
       } finally {
-        this.loading = false;
+        loading.value = false
       }
-    },
-    changePage(page) {
-      if (page >= 1 && page <= this.pagination.last_page) {
-        this.fetchBooks(page);
+    }
+    
+    const changePage = (page) => {
+      if (page >= 1 && page <= pagination.value.last_page) {
+        fetchBooks(page)
       }
-    },
-    confirmDelete(book) {
-      this.bookToDelete = book;
-    },
-    async deleteBook() {
+    }
+    
+    const confirmDelete = (book) => {
+      bookToDelete.value = book
+    }
+    
+    const deleteBook = async () => {
       try {
-        await this.$axios.delete(`/books/${this.bookToDelete.id}`);
-        this.$emit('success', 'Livro excluído com sucesso!');
-        this.bookToDelete = null;
-        await this.fetchBooks(this.pagination.current_page);
+        await axios.delete(`/books/${bookToDelete.value.id}`)
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'success', message: 'Livro excluído com sucesso!' }
+        }))
+        bookToDelete.value = null
+        await fetchBooks(pagination.value.current_page)
       } catch (error) {
-        console.error('Erro ao excluir livro:', error);
-        this.$emit('error', 'Erro ao excluir livro.');
-        this.bookToDelete = null;
+        console.error('Erro ao excluir livro:', error)
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'error', message: 'Erro ao excluir livro.' }
+        }))
+        bookToDelete.value = null
       }
-    },
-    formatDate(dateString) {
-      return new Date(dateString).toLocaleDateString('pt-BR');
-    },
-    truncateText(text, length) {
-      if (text.length <= length) return text;
-      return text.substring(0, length) + '...';
+    }
+    
+    const formatDate = (dateString) => {
+      return new Date(dateString).toLocaleDateString('pt-BR')
+    }
+    
+    const truncateText = (text, length) => {
+      if (!text) return ''
+      if (text.length <= length) return text
+      return text.substring(0, length) + '...'
+    }
+    
+    onMounted(() => {
+      fetchBooks()
+    })
+    
+    return {
+      books,
+      pagination,
+      loading,
+      bookToDelete,
+      canManage,
+      paginationPages,
+      changePage,
+      confirmDelete,
+      deleteBook,
+      formatDate,
+      truncateText,
+      getImageUrl
     }
   }
 };

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Models\Author;
@@ -19,6 +20,9 @@ class AuthorApiController extends Controller
         if ($request->has('estado')) {
             $authors->where('estado', $request->estado);
         }
+
+        // Incluir contagem de livros
+        $authors->withCount('books');
 
         // Paginação
         $perPage = $request->get('per_page', 15);
@@ -64,7 +68,7 @@ class AuthorApiController extends Controller
      */
     public function show($id)
     {
-        $author = Author::find($id);
+        $author = Author::with('books')->find($id);
 
         if (! $author) {
             return response()->json([

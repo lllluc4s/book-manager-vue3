@@ -1,0 +1,31 @@
+/* Estilos específicos para a listagem de livros */
+
+/* Adiciona sombra às imagens de capa dos livros */
+.text-center img.rounded {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.text-center img.rounded:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Background mais escuro para o card-body para contraste */
+.card-body {
+  background-color: #e6e9ec;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.author-book-card {
+  background-color: #f8f9fa;
+}
+
+/* Arredondamento no final do card para combinar com o design */
+.book-card {
+  overflow: hidden;
+}

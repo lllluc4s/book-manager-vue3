@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
       <router-link class="navbar-brand" :to="isAuthenticated ? '/books' : '/'">
         <i class="bi bi-book"></i> Gestão de Livros
@@ -10,7 +10,7 @@
       </button>
       
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav me-auto">
           <li v-if="isAuthenticated" class="nav-item">
             <router-link class="nav-link" :class="$route.name?.startsWith('books') ? 'active' : ''" to="/books">
               <i class="bi bi-book"></i> Livros
@@ -26,18 +26,18 @@
         <!-- Menu do usuário -->
         <ul class="navbar-nav ms-auto">
           <li v-if="isAuthenticated" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="bi bi-person-circle"></i> {{ user?.name }}
+            <a class="nav-link user-dropdown-toggle" href="#" @click.prevent="toggleDropdown">
+              <i class="bi bi-person-circle"></i> {{ user?.name || 'Usuário' }} <i class="bi bi-caret-down-fill"></i>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end" :class="{ 'show': showDropdown }">
               <li>
-                <a class="dropdown-item" href="#" @click="logout">
+                <a class="dropdown-item" href="#" @click.prevent="logout">
                   <i class="bi bi-box-arrow-right"></i> Sair
                 </a>
               </li>
             </ul>
           </li>
-          <li v-else class="nav-item">
+          <li v-else-if="$route.name !== 'login'" class="nav-item">
             <router-link class="nav-link" to="/login">
               <i class="bi bi-box-arrow-in-right"></i> Login
             </router-link>
@@ -49,43 +49,132 @@
 </template>
 
 <script>
+import authService from '../../services/auth.service';
+
 export default {
   name: 'NavBar',
   data() {
     return {
-      user: null
+      user: null,
+      showDropdown: false,
+      authState: !!authService.getToken() // Propriedade reativa para controle do estado de autenticação
     };
   },
   computed: {
     isAuthenticated() {
-      return !!localStorage.getItem('auth_token');
+      return this.authState;
     }
   },
   async mounted() {
     if (this.isAuthenticated) {
       await this.fetchUser();
     }
+    
+    // Adicionar evento de clique global para fechar o dropdown
+    document.addEventListener('click', this.closeDropdownOnClickOutside);
+    
+    // Ouvir eventos de alteração de autenticação
+    window.addEventListener('auth-state-changed', this.handleAuthStateChanged);
+  },
+  
+  beforeUnmount() {
+    // Remover eventos globais ao desmontar o componente
+    document.removeEventListener('click', this.closeDropdownOnClickOutside);
+    window.removeEventListener('auth-state-changed', this.handleAuthStateChanged);
   },
   methods: {
+    toggleDropdown(event) {
+      event.stopPropagation();
+      this.showDropdown = !this.showDropdown;
+    },
+    
+    closeDropdownOnClickOutside(event) {
+      const dropdown = document.querySelector('.user-dropdown-toggle');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+      
+      // Se o clique não foi no dropdown ou dentro do menu do dropdown, feche-o
+      if (dropdown && dropdownMenu && 
+          !dropdown.contains(event.target) && 
+          !dropdownMenu.contains(event.target)) {
+        this.showDropdown = false;
+      }
+    },
+    
     async fetchUser() {
       try {
+        // Verificar primeiro se está autenticado
+        if (!authService.isAuthenticated()) {
+          console.log('Não há token de autenticação');
+          this.authState = false;
+          return;
+        }
+
+        // Atualizar estado de autenticação
+        this.authState = true;
+
+        // Obter usuário do localStorage para exibição imediata
+        const storedUser = authService.getUser();
+        if (storedUser) {
+          this.user = storedUser;
+        }
+        
+        // Validar com a API
         const response = await this.$axios.get('/auth/user');
-        this.user = response.data;
+        if (response.data.success) {
+          this.user = response.data.data;
+          // Atualizar no serviço
+          authService.setUser(this.user);
+        } else {
+          throw new Error('Resposta inválida da API');
+        }
       } catch (error) {
         console.error('Erro ao buscar usuário:', error);
-        // Se der erro, provavelmente o token é inválido
-        this.logout();
+        // Se houver erro de autenticação, fazer logout
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          await this.logout();
+        }
       }
     },
     async logout() {
       try {
-        await this.$axios.post('/auth/logout');
-      } catch (error) {
-        console.error('Erro no logout:', error);
-      } finally {
-        localStorage.removeItem('auth_token');
+        // Fechar o dropdown
+        this.showDropdown = false;
+        
+        await authService.logout();
         this.user = null;
+        
+        // Adicionar uma mensagem de sucesso antes de redirecionar
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'success', message: 'Logout realizado com sucesso!' }
+        }));
+        
+        // Redirecionar para a página inicial
         this.$router.push('/');
+      } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+        window.dispatchEvent(new CustomEvent('show-message', {
+          detail: { type: 'error', message: 'Erro ao fazer logout. Por favor, tente novamente.' }
+        }));
+      }
+    },
+    
+    // Método para lidar com alterações no estado de autenticação
+    async handleAuthStateChanged(event) {
+      const { authenticated, user } = event.detail;
+      
+      // Atualizar o estado de autenticação
+      this.authState = authenticated;
+      
+      if (authenticated) {
+        // Se autenticado, definir o usuário ou buscar da API
+        if (user) {
+          this.user = user;
+        } else {
+          await this.fetchUser();
+        }
+      } else {
+        // Se não autenticado, limpar usuário
+        this.user = null;
       }
     }
   },
@@ -99,3 +188,56 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.user-dropdown-toggle {
+  cursor: pointer;
+}
+
+.user-dropdown-toggle .bi-caret-down-fill {
+  font-size: 0.75em;
+  margin-inline-start: 5px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  transform: translate(-16px, 40px);
+  display: none;
+  min-inline-size: 10rem;
+  padding: 0.5rem 0;
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: start;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+.dropdown-menu.show {
+  display: block;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: block;
+  inline-size: 100%;
+  padding: 0.25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #1e2125;
+  background-color: #e9ecef;
+}
+</style>
