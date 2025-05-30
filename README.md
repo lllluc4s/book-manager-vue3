@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📚 Sistema de Gestão de Livros
 
 Sistema Laravel com Vue 3 para gestão de livros e autores. Inclui SPA (Single Page Application), API REST com autenticação, upload de imagens, middleware de segurança e sistema de agendamento de tarefas.
