@@ -15,9 +15,46 @@ updates:
       - "php"
       - "composer"
     commit-message:
-      prefix: "⬆️ deps"
+      prefix: "⬆️ deps(php)"
       include: "scope"
     reviewers:
       - "lllluc4s"
     assignees:
       - "dependabot"
+    allow:
+      - dependency-type: "direct"
+    versioning-strategy: "auto"
+
+  # Dependências do npm (JavaScript/Vue.js)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 7
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "frontend"
+    commit-message:
+      prefix: "⬆️ deps(js)"
+      include: "scope"
+    reviewers:
+      - "lllluc4s"
+    assignees:
+      - "dependabot"
+    allow:
+      - dependency-type: "direct"
+    ignore:
+      - dependency-name: "vue"
+        versions: ["4.x"] # Ignorar atualizações major do Vue por enquanto
+    groups:
+      vue-packages:
+        patterns:
+          - "vue*"
+        exclude-patterns:
+          - "@vitejs/plugin-vue"
+      dev-dependencies:
+        dependency-type: "development"
