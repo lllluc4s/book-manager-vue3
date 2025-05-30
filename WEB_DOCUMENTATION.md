@@ -1,6 +1,6 @@
 # 🌐 Sistema Web - Gestão de Livros
 
-Sistema Laravel com interface web responsiva para gestão de livros e autores.
+Sistema Laravel com interface SPA (Single Page Application) em Vue 3 para gestão de livros e autores.
 
 ## 🗄️ Estrutura do Banco de Dados
 
@@ -35,57 +35,56 @@ Criados via seeders:
 - **Administrador:** admin@test.com / password
 - **Usuário:** user@test.com / password
 
-## 🌍 URLs e Funcionalidades
+## 🌍 Rotas da SPA Vue 3
+
+O sistema utiliza Vue Router para gerenciar as rotas do frontend como um aplicativo de página única (SPA).
 
 ### Sistema de Autenticação
 
-| URL       | Método | Descrição           |
-| --------- | ------ | ------------------- |
-| `/login`  | GET    | Formulário de login |
-| `/login`  | POST   | Processar login     |
-| `/logout` | POST   | Fazer logout        |
+| Rota      | Componente Vue      | Descrição           |
+| --------- | ------------------- | ------------------- |
+| `/login`  | `Login.vue`         | Formulário de login |
+| `/logout` | Manipulado pela SPA | Fazer logout        |
 
-### Área Administrativa (Requer Login + Permissão Admin)
+### Área de Usuário (Requer Autenticação)
 
 #### Gestão de Livros
 
-| URL                | Método | Descrição             |
-| ------------------ | ------ | --------------------- |
-| `/books`           | GET    | Lista todos os livros |
-| `/books/create`    | GET    | Formulário de criação |
-| `/books`           | POST   | Salvar novo livro     |
-| `/books/{id}`      | GET    | Visualizar livro      |
-| `/books/{id}/edit` | GET    | Formulário de edição  |
-| `/books/{id}`      | PUT    | Atualizar livro       |
-| `/books/{id}`      | DELETE | Excluir livro         |
-| `/books/{id}/capa` | DELETE | Remover capa do livro |
+| Rota               | Componente Vue   | Descrição             |
+| ------------------ | ---------------- | --------------------- |
+| `/books`           | `BookList.vue`   | Lista todos os livros |
+| `/books/create`    | `BookCreate.vue` | Formulário de criação |
+| `/books/{id}`      | `BookShow.vue`   | Visualizar livro      |
+| `/books/{id}/edit` | `BookEdit.vue`   | Formulário de edição  |
 
 #### Gestão de Autores
 
-| URL                  | Método | Descrição                           |
-| -------------------- | ------ | ----------------------------------- |
-| `/authors`           | GET    | Lista todos os autores              |
-| `/authors/create`    | GET    | Formulário de criação               |
-| `/authors`           | POST   | Salvar novo autor                   |
-| `/authors/{id}`      | GET    | Visualizar autor e seus livros      |
-| `/authors/{id}/edit` | GET    | Formulário de edição                |
-| `/authors/{id}`      | PUT    | Atualizar autor                     |
-| `/authors/{id}`      | DELETE | Excluir autor (se não tiver livros) |
+| Rota                 | Componente Vue     | Descrição                      |
+| -------------------- | ------------------ | ------------------------------ |
+| `/authors`           | `AuthorList.vue`   | Lista todos os autores         |
+| `/authors/create`    | `AuthorCreate.vue` | Formulário de criação          |
+| `/authors/{id}`      | `AuthorShow.vue`   | Visualizar autor e seus livros |
+| `/authors/{id}/edit` | `AuthorEdit.vue`   | Formulário de edição           |
+
+### Backend APIs Utilizadas
+
+Todas as operações de frontend agora consomem a API REST do sistema descrita em `API_DOCUMENTATION.md`.
 
 ## 🔒 Funcionalidades de Segurança
 
-### Middleware de Administrador
+### Autenticação SPA com Tokens
 
-- **Verificação de permissões** em todas as rotas administrativas
-- **Erro 403** para usuários não autorizados
+- **Guards de rotas Vue** para proteção das páginas que necessitam autenticação
+- **Token Bearer** armazenado em localStorage para autenticação
+- **Interceptor Axios** para enviar token automaticamente em cada requisição
 - **Redirecionamento automático** para login quando não autenticado
 
 ### Validação e Proteção
 
-- **Proteção CSRF** nos formulários
+- **Proteção CSRF** via token em meta tag e interceptor Axios
 - **Validação de uploads** (JPG/PNG, máx 2MB)
 - **Proteção contra exclusão** de autores com livros associados
-- **Sanitização** de dados de entrada
+- **Validação de formulários** no frontend e backend
 
 ## 📷 Sistema de Upload de Imagens
 
@@ -95,13 +94,24 @@ Criados via seeders:
 - **Tamanho máximo:** 2MB
 - **Redimensionamento automático:** 200x200 pixels
 - **Armazenamento:** storage/app/public/capas/
-- **Visualização:** Preview na edição e detalhes
+- **Visualização:** Preview dinâmico via componentes Vue
 
-### Validação
+## 🔧 Estrutura da Aplicação Vue 3
 
-```php
-'capa' => 'nullable|image|mimes:jpeg,jpg,png|max:2048'
-```
+### Organização de Arquivos
+
+- **resources/js/app.js** - Ponto de entrada da aplicação Vue
+- **resources/js/components/** - Componentes Vue organizados por funcionalidade
+- **resources/js/composables/** - Composables Vue para lógica reutilizável
+- **resources/views/app.blade.php** - Template base para montar a SPA
+
+### Principais Tecnologias Frontend
+
+- **Vue 3** - Framework JavaScript progressivo
+- **Vue Router 4** - Sistema de roteamento para SPA
+- **Axios** - Cliente HTTP para comunicação com API
+- **Bootstrap 5** - Framework CSS para UI responsiva
+- **Vite** - Build tool para desenvolvimento rápido
 
 ## ⚙️ Sistema de Scheduler
 
@@ -122,27 +132,12 @@ php artisan logs:clean-old [--days=30]
 ### 1. Acessar como Visitante
 
 1. Acesse: `http://localhost:8000`
-2. Navegue pela página inicial sem login
+2. Navegue pela página inicial da SPA Vue sem login
 
-### 2. Fazer Login Administrativo
+### 2. Fazer Login
 
-1. Clique em "Login" na navbar
+1. Clique em "Login" no menu de navegação
 2. Use as credenciais: `admin@test.com` / `password`
-3. Será redirecionado para área administrativa
-
-### 3. Gerenciar Livros
-
-1. Acesse "Livros" no menu principal
-2. Use botões para **Criar**, **Editar** ou **Excluir**
-3. **Upload de capas:** Drag & drop ou seleção de arquivo
-4. **Visualização:** Capa aparece redimensionada automaticamente
-
-### 4. Gerenciar Autores
-
-1. Acesse "Autores" no menu principal
-2. Crie novos autores com nome e estado
-3. Visualize livros associados a cada autor
-4. **Restrição:** Autores com livros não podem ser excluídos
 
 ---
 

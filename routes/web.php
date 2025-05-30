@@ -11,20 +11,11 @@ Route::get('/', function () {
     return view('app');
 })->name('home');
 
-// Rotas Vue SPA (todas as rotas do frontend serão capturadas aqui)
-Route::get('/{any}', function () {
-    return view('app');
-})->where('any', '.*')->name('spa');
-
-/*
-// Rotas de autenticação Blade desabilitadas - usando API
+// Rotas de autenticação Blade (mínimo necessário para testes)
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-*/
 
-/*
-// Rotas Blade desabilitadas - substituídas por Vue SPA + API
 // Rotas protegidas por autenticação - apenas visualização
 Route::middleware('auth')->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
@@ -54,4 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     Route::get('/authors/{author}', [AuthorController::class, 'show'])->name('authors.show');
 });
-*/
+
+// Rotas Vue SPA (todas as rotas do frontend serão capturadas aqui)
+// Essa rota deve vir por último para não interferir com as outras
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*')->name('spa');
