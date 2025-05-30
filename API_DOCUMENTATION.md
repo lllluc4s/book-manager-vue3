@@ -1,6 +1,6 @@
 # 📡 API REST - Sistema de Gestão de Livros
 
-API para gestão de autores com autenticação Laravel Sanctum.
+API para gestão de livros e autores com autenticação Laravel Sanctum. Esta API foi projetada para funcionar com o frontend Vue 3.
 
 ## 🔐 Autenticação
 
@@ -68,7 +68,7 @@ Authorization: Bearer {token}
 
 ## 👥 Endpoints de Autores
 
-> **⚠️ Todas as rotas de autores requerem autenticação**
+> **⚠️ Todas as rotas a seguir requerem autenticação**
 
 ### 1. Listar Autores
 
@@ -155,6 +155,74 @@ Authorization: Bearer {token}
         }
     }
 }
+```
+
+## 📚 Endpoints de Livros
+
+> **⚠️ Todas as rotas de livros requerem autenticação**
+
+### 1. Listar Livros
+
+```http
+GET /api/books
+Authorization: Bearer {token}
+
+# Parâmetros opcionais:
+# ?author_id=1 (filtrar por autor)
+# ?per_page=15 (itens por página)
+```
+
+### 2. Criar Livro
+
+```http
+POST /api/books
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+    "titulo": "Título do Livro",
+    "descricao": "Descrição detalhada do livro",
+    "data_publicacao": "2025-05-15",
+    "author_id": 1,
+    "capa": "base64_encoded_image_string"  // Opcional
+}
+```
+
+### 3. Exibir Livro Específico
+
+```http
+GET /api/books/{id}
+Authorization: Bearer {token}
+```
+
+### 4. Atualizar Livro
+
+```http
+PUT /api/books/{id}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+    "titulo": "Novo Título",
+    "descricao": "Nova descrição",
+    "data_publicacao": "2025-06-01",
+    "author_id": 2,
+    "capa": "base64_encoded_image_string"  // Opcional
+}
+```
+
+### 5. Excluir Livro
+
+```http
+DELETE /api/books/{id}
+Authorization: Bearer {token}
+```
+
+### 6. Remover Capa do Livro
+
+```http
+DELETE /api/books/{id}/capa
+Authorization: Bearer {token}
 ```
 
 ## 📊 Códigos de Status HTTP
