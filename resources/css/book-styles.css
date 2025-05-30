@@ -21,6 +21,10 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.author-book-card {
+  background-color: #f8f9fa;
+}
+
 /* Arredondamento no final do card para combinar com o design */
 .book-card {
   overflow: hidden;

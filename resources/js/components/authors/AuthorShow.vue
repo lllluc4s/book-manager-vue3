@@ -37,7 +37,7 @@
               class="col-md-6 col-lg-4 mb-3"
             >
               <div class="card card-uniform-height">
-                <div class="card-body">
+                <div class="card-body author-book-card">
                   <h6 class="card-title">{{ book.titulo }}</h6>
                   <p class="card-text text-muted small">
                     <i class="bi bi-calendar"></i> {{ formatDate(book.data_publicacao) }}
