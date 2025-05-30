@@ -51,10 +51,10 @@ body {
   background-color: var(--background-color);
 }
 
-.card-custom .card-header {
+.card-header {
   background-color: var(--primary-color) !important;
   border-bottom: 1px solid var(--border-color);
-  color: var(--text-color);
+  color: var(--background-color);
 }
 
 /* Button customization */

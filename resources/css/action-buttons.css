@@ -16,18 +16,21 @@
   color: #fff;
   background-color: #28a745; /* Verde */
   border-color: #28a745;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3); /* Sombra verde */
 }
 
 .btn-edit {
   color: #fff;
   background-color: #007bff; /* Azul */
   border-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3); /* Sombra azul */
 }
 
 .btn-delete {
   color: #fff;
   background-color: #dc3545; /* Vermelho */
   border-color: #dc3545;
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3); /* Sombra vermelha */
 }
 
 /* Efeitos de hover */
@@ -42,18 +45,21 @@
   color: #fff;
   background-color: #218838; /* Verde mais escuro */
   border-color: #1e7e34;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4); /* Sombra verde mais pronunciada no hover */
 }
 
 .btn-edit:hover {
   color: #fff;
   background-color: #0069d9; /* Azul mais escuro */
   border-color: #0062cc;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Sombra azul mais pronunciada no hover */
 }
 
 .btn-delete:hover {
   color: #fff;
   background-color: #c82333; /* Vermelho mais escuro */
   border-color: #bd2130;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4); /* Sombra vermelha mais pronunciada no hover */
 }
 
 /* Estilo para grupos de botões de ação */
