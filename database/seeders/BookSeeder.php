@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\Author;
@@ -143,13 +144,18 @@ class BookSeeder extends Seeder
         ];
 
         foreach ($books as $bookData) {
-            $author = $authors->where('nome', $bookData['autor'])->first();
+            // Busca diretamente no banco de dados para garantir o autor correto
+            $author = Author::where('nome', $bookData['autor'])->first();
+
+            if (!$author) {
+                $author = $authors->random();
+            }
 
             Book::create([
                 'titulo'          => $bookData['titulo'],
                 'descricao'       => $bookData['descricao'],
                 'data_publicacao' => $bookData['data_publicacao'],
-                'author_id'       => $author ? $author->id : $authors->random()->id,
+                'author_id'       => $author->id,
             ]);
         }
     }

@@ -4,11 +4,13 @@
       <div class="book-icon">
         <svg class="book-svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/>
+          <!-- Linha central para simular livro aberto -->
+          <line x1="12" y1="5" x2="12" y2="23" stroke="#000" stroke-width="0.5" stroke-opacity="1" />
         </svg>
       </div>
-      
-      <h1>Gestão de Livros</h1>
-      
+
+      <h1><strong>Gestão de Livros</strong></h1>
+
       <p class="login-message">
         Faça login para acessar o sistema =)
       </p>
@@ -42,13 +44,13 @@ export default {
 
 .container {
   text-align: center;
-  max-width: 400px;
+  max-width: 480px;
   padding: 2rem;
 }
 
 .book-icon {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   margin: 0 auto 2rem;
   display: flex;
   align-items: center;
@@ -56,20 +58,21 @@ export default {
 }
 
 .book-svg {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   fill: #fff;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: 2rem;
   color: #fff;
 }
 
 .login-message {
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #ccc;
   margin-bottom: 2rem;
   line-height: 1.5;
@@ -97,17 +100,21 @@ h1 {
   }
   
   h1 {
-    font-size: 1.5rem;
+    font-size: 2rem;
+  }
+  
+  .login-message {
+    font-size: 1.1rem;
   }
   
   .book-icon {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
   }
   
   .book-svg {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
   }
 }
 </style>

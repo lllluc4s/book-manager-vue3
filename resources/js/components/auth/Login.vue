@@ -1,9 +1,9 @@
 <template>
-  <div class="login-container">
+  <div class="container mt-5">
     <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="card shadow border-0">
+          <div class="card-header bg-primary text-white text-center py-3">
             <h4 class="mb-0">
               <i class="bi bi-person-circle me-2"></i>
               Login
@@ -24,6 +24,7 @@
                   v-model="form.email"
                   required 
                   autofocus
+                  placeholder="Digite seu e-mail"
                 >
                 <div v-if="errors.email" class="invalid-feedback">{{ errors.email[0] }}</div>
               </div>
@@ -40,6 +41,7 @@
                   id="password" 
                   v-model="form.password"
                   required
+                  placeholder="Digite sua senha"
                 >
                 <div v-if="errors.password" class="invalid-feedback">{{ errors.password[0] }}</div>
               </div>
@@ -60,7 +62,7 @@
               </div>
             </form>
             
-            <hr>
+            <hr class="my-4">
             
             <div class="text-center">
               <small class="text-muted">
@@ -77,6 +79,8 @@
 </template>
 
 <script>
+import authService from '../../services/auth.service';
+
 export default {
   name: 'Login',
   data() {
@@ -96,25 +100,29 @@ export default {
       this.errors = {};
       
       try {
-        const response = await this.$axios.post('/auth/login', this.form);
+        // Usar o serviço de autenticação
+        const result = await authService.login(this.form);
         
-        // Salvar token no localStorage
-        localStorage.setItem('auth_token', response.data.token);
-        
-        // Emitir mensagem de sucesso
-        this.$emit('success', 'Login realizado com sucesso!');
-        
-        // Redirecionar para a lista de livros
-        this.$router.push('/books');
-        
+        if (result.success) {
+          // Emitir mensagem de sucesso
+          this.$emit('success', 'Login realizado com sucesso!');
+          
+          // Uma breve pausa para permitir que os eventos sejam processados
+          await this.$nextTick();
+          
+          // Redirecionar para a lista de livros
+          this.$router.push('/books');
+        } else {
+          // Mostrar mensagem de erro
+          this.$emit('error', result.message);
+        }
       } catch (error) {
+        console.error('Erro no login:', error);
         if (error.response?.status === 422) {
           // Erros de validação
           this.errors = error.response.data.errors || {};
-        } else if (error.response?.status === 401) {
-          this.$emit('error', 'Credenciais inválidas. Verifique seu e-mail e senha.');
         } else {
-          this.$emit('error', 'Erro no servidor. Tente novamente.');
+          this.$emit('error', 'Erro ao tentar fazer login. Tente novamente.');
         }
       } finally {
         this.loading = false;
@@ -123,18 +131,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.login-container {
-  min-height: calc(100vh - 200px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-container .row {
-  width: 100%;
-  max-width: 400px;
-  margin: 0;
-}
-</style>

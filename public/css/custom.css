@@ -1,6 +1,6 @@
-/* Compensação para navbar fixa */
+/* Sem padding extra para o body */
 body {
-  padding-top: 70px; /* Espaçamento para navbar fixa */
+  padding-top: 0;
 }
 
 /* Paleta de cores personalizada */
