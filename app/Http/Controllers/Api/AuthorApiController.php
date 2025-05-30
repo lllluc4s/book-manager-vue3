@@ -141,7 +141,7 @@ class AuthorApiController extends Controller
         if ($author->books()->count() > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Não é possível excluir um autor que possui livros associados',
+                'message' => '=( Ops! Não é possível excluir este autor pois ele possui livros associados. Exclua os livros primeiro.',
             ], 409);
         }
 

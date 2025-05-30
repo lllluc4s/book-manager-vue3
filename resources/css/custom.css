@@ -17,6 +17,9 @@
   /* Hover and active states */
   --primary-hover: #222;
   --primary-active: #111;
+
+  /* Navbar height */
+  --navbar-height: 56px;
 }
 
 /* Override Bootstrap variables with custom palette */
@@ -29,6 +32,12 @@ body {
 .navbar-custom {
   background-color: var(--primary-color) !important;
   border-bottom: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-custom .navbar-brand,
@@ -43,6 +52,44 @@ body {
 .navbar-custom .navbar-nav .nav-link.active {
   color: var(--light-gray) !important;
   font-weight: 600;
+}
+
+/* Garantir que o ícone do hamburger seja branco */
+.navbar-custom .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Classe para ajustar o conteúdo abaixo da navbar fixa */
+.content-wrapper {
+  padding-top: calc(var(--navbar-height) + 4rem) !important;
+  transition: padding-top 0.3s ease;
+}
+
+/* Media queries para ajustar em diferentes tamanhos de tela */
+@media (max-width: 992px) {
+  .content-wrapper {
+    padding-top: calc(var(--navbar-height) + 3.5rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding-top: calc(var(--navbar-height) + 3rem) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-wrapper {
+    padding-top: calc(var(--navbar-height) + 2.5rem) !important;
+  }
+
+  .navbar-custom {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .navbar-custom .navbar-brand {
+    font-size: 1.1rem;
+  }
 }
 
 /* Card customization */
@@ -172,6 +219,7 @@ body {
 
 /* Título do site com tamanho maior */
 .navbar-brand {
+  padding-bottom: 0.9rem;
   font-size: 1.8rem !important; /* Aumentado para dar mais destaque */
   font-weight: 700 !important; /* Aumentado o peso da fonte para dar mais destaque */
   transition: all 0.3s ease;

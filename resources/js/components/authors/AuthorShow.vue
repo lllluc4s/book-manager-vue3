@@ -150,13 +150,16 @@ export default {
         console.error('Erro ao excluir autor:', error)
         let message = 'Erro ao excluir autor.'
         
-        if (error.response?.status === 400) {
+        if (error.response?.status === 409) {
           message = error.response.data.message || 'Não é possível excluir este autor pois ele possui livros associados.'
+          window.dispatchEvent(new CustomEvent('show-message', {
+            detail: { type: 'error', message }
+          }))
+        } else {
+          window.dispatchEvent(new CustomEvent('show-message', {
+            detail: { type: 'error', message }
+          }))
         }
-        
-        window.dispatchEvent(new CustomEvent('show-message', {
-          detail: { type: 'error', message }
-        }))
       }
     }
 

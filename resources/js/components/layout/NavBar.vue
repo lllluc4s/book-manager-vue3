@@ -5,7 +5,7 @@
         <i class="bi bi-book"></i> Gestão de Livros
       </router-link>
       
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       
@@ -239,5 +239,40 @@ export default {
 .dropdown-item:hover, .dropdown-item:focus {
   color: #1e2125;
   background-color: #e9ecef;
+}
+
+/* Estilo para o ícone do hambúrguer (garantir que seja branco) */
+.custom-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Centralizar ícones no menu mobile */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link i {
+    display: inline-block;
+    margin-right: 5px;
+  }
+  
+  .dropdown-item i {
+    margin-right: 8px;
+    text-align: center;
+  }
+  
+  .dropdown-menu {
+    text-align: center;
+    transform: none;
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+  }
+  
+  .navbar-nav {
+    text-align: center;
+  }
+  
+  .dropdown-item {
+    text-align: center;
+  }
 }
 </style>
