@@ -1,0 +1,52 @@
+/* Efeitos de hover específicos apenas para os cards mostrados nas imagens */
+
+/* Aplicar o efeito somente aos cards específicos de livros e autores */
+
+/* Card da listagem de livros (primeira imagem - BookList.vue) */
+.row-uniform-height .card.h-100.book-card.card-uniform-height {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.row-uniform-height .card.h-100.book-card.card-uniform-height:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Card da página de autor (segunda imagem - AuthorShow.vue) */
+.col-md-6 .card.card-uniform-height,
+.col-lg-4 .card.card-uniform-height {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.col-md-6 .card.card-uniform-height:hover,
+.col-lg-4 .card.card-uniform-height:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Seletores específicos baseados nas classes examinadas no console do navegador */
+div[class*='card-uniform-height'] {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+div[class*='card-uniform-height']:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+/* Garantir que cards em tabelas ou outros contextos não recebam o efeito */
+table .card,
+.table .card,
+.table-responsive .card {
+  transition: none;
+}
+
+table .card:hover,
+.table .card:hover,
+.table-responsive .card:hover {
+  transform: none;
+  box-shadow: none;
+}
