@@ -121,7 +121,7 @@
             <div class="d-flex justify-content-between">
               <router-link 
                 :to="{ name: 'books.show', params: { id: book.id } }" 
-                class="btn btn-custom-outline"
+                class="btn btn-custom-primary"
               >
                 <i class="bi bi-arrow-left"></i> Voltar
               </router-link>

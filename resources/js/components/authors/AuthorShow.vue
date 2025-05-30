@@ -72,7 +72,7 @@
           <div class="mt-4">
             <router-link 
               :to="{ name: 'authors.index' }" 
-              class="btn btn-custom-outline"
+              class="btn btn-custom-primary"
             >
               <i class="bi bi-arrow-left"></i> Voltar à Lista
             </router-link>

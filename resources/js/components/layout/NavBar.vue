@@ -37,7 +37,7 @@
               </li>
             </ul>
           </li>
-          <li v-else class="nav-item">
+          <li v-else-if="$route.name !== 'login'" class="nav-item">
             <router-link class="nav-link" to="/login">
               <i class="bi bi-box-arrow-in-right"></i> Login
             </router-link>
