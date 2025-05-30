@@ -1,8 +1,6 @@
-/* Efeitos de hover específicos apenas para os cards mostrados nas imagens */
-
 /* Aplicar o efeito somente aos cards específicos de livros e autores */
 
-/* Card da listagem de livros (primeira imagem - BookList.vue) */
+/* Card da listagem de livros */
 .row-uniform-height .card.h-100.book-card.card-uniform-height {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -13,7 +11,7 @@
   z-index: 1;
 }
 
-/* Card da página de autor (segunda imagem - AuthorShow.vue) */
+/* Card da página de autor */
 .col-md-6 .card.card-uniform-height,
 .col-lg-4 .card.card-uniform-height {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

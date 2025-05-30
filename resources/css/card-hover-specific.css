@@ -1,14 +1,8 @@
-/* Efeitos de hover especificamente para os cards de livros e autores mostrados nas imagens */
-
-/* Remover qualquer efeito de hover geral de outros cards */
 .card:hover {
   transform: none !important;
   box-shadow: none !important;
 }
 
-/* APLICAR EFEITO DE HOVER APENAS NOS CARDS ESPECÍFICOS */
-
-/* Cards da listagem de livros (primeira imagem) */
 .row-uniform-height .card.h-100.book-card.card-uniform-height {
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
@@ -19,7 +13,6 @@
   z-index: 1;
 }
 
-/* Cards na página de detalhes do autor (segunda imagem) */
 .row-uniform-height .card.card-uniform-height {
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
@@ -30,7 +23,6 @@
   z-index: 1;
 }
 
-/* Estilos extremamente específicos para garantir que o efeito seja aplicado apenas nos cards desejados */
 .books-container .card.h-100.book-card.card-uniform-height:hover,
 .author-books .card.card-uniform-height:hover,
 .row-uniform-height .col-md-4 .card.h-100.book-card:hover,
@@ -41,7 +33,6 @@
   z-index: 1;
 }
 
-/* Garantir que outros cards não recebam o efeito */
 .table .card:hover,
 .table-responsive .card:hover,
 .list-group .card:hover,
