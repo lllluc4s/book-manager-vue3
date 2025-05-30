@@ -22,8 +22,10 @@ body {
   color: var(--background-color) !important;
 }
 
+.navbar-custom .navbar-nav .nav-link:hover,
 .navbar-custom .nav-link:hover {
-  color: #ccc !important;
+  color: #aaa !important;
+  transform: none !important;
 }
 
 /* Navbar responsive fixes */
