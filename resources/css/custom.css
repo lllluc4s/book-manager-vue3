@@ -17,6 +17,9 @@
   /* Hover and active states */
   --primary-hover: #222;
   --primary-active: #111;
+
+  /* Navbar height */
+  --navbar-height: 56px;
 }
 
 /* Override Bootstrap variables with custom palette */
@@ -29,6 +32,12 @@ body {
 .navbar-custom {
   background-color: var(--primary-color) !important;
   border-bottom: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-custom .navbar-brand,
@@ -43,6 +52,39 @@ body {
 .navbar-custom .navbar-nav .nav-link.active {
   color: var(--light-gray) !important;
   font-weight: 600;
+}
+
+/* Classe para ajustar o conteúdo abaixo da navbar fixa */
+.content-wrapper {
+  padding-top: calc(var(--navbar-height) + 1.5rem) !important;
+  transition: padding-top 0.3s ease;
+}
+
+/* Media queries para ajustar em diferentes tamanhos de tela */
+@media (max-width: 992px) {
+  .content-wrapper {
+    padding-top: calc(var(--navbar-height) + 1.25rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding-top: calc(var(--navbar-height) + 1rem) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .content-wrapper {
+    padding-top: calc(var(--navbar-height) + 0.75rem) !important;
+  }
+
+  .navbar-custom {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .navbar-custom .navbar-brand {
+    font-size: 1.1rem;
+  }
 }
 
 /* Card customization */
