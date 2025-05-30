@@ -61,26 +61,26 @@ body {
 
 /* Classe para ajustar o conteúdo abaixo da navbar fixa */
 .content-wrapper {
-  padding-top: calc(var(--navbar-height) + 2.5rem) !important;
+  padding-top: calc(var(--navbar-height) + 4rem) !important;
   transition: padding-top 0.3s ease;
 }
 
 /* Media queries para ajustar em diferentes tamanhos de tela */
 @media (max-width: 992px) {
   .content-wrapper {
-    padding-top: calc(var(--navbar-height) + 2rem) !important;
+    padding-top: calc(var(--navbar-height) + 3.5rem) !important;
   }
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
-    padding-top: calc(var(--navbar-height) + 1.75rem) !important;
+    padding-top: calc(var(--navbar-height) + 3rem) !important;
   }
 }
 
 @media (max-width: 576px) {
   .content-wrapper {
-    padding-top: calc(var(--navbar-height) + 1.5rem) !important;
+    padding-top: calc(var(--navbar-height) + 2.5rem) !important;
   }
 
   .navbar-custom {
@@ -219,6 +219,7 @@ body {
 
 /* Título do site com tamanho maior */
 .navbar-brand {
+  padding-bottom: 0.9rem;
   font-size: 1.8rem !important; /* Aumentado para dar mais destaque */
   font-weight: 700 !important; /* Aumentado o peso da fonte para dar mais destaque */
   transition: all 0.3s ease;
